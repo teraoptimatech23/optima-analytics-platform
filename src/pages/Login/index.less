@@ -1,0 +1,945 @@
+@import '@/styles/mixins.less';
+
+// The login surface is the only full-bleed page in the app. It reuses the
+// dashboard's glass recipe and theme tokens rather than hardcoding a palette,
+// so light and dark both look intentional.
+//
+// Liquid glass here is built from four stacked ideas, in this order:
+//   1. a lit backdrop (aurora + mesh) so there is something to refract
+//   2. drifting shards behind the card, which the blur bends
+//   3. the pane itself: heavy blur + saturation + a bright inner rim
+//   4. a slow caustic highlight that travels across the surface
+// Remove any one of them and the card flattens into plain translucency.
+
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: clamp(16px, 3.4vw, 48px);
+  overflow: hidden;
+  background: var(--canvas-page);
+  color: @text-primary;
+  isolation: isolate;
+}
+
+// ── 1. Backdrop: aurora + mesh ──────────────────────────────────
+.login-page__scene {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.login-page__aurora {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(94px);
+  will-change: transform;
+  animation: loginDrift 26s @ease-out infinite;
+
+  &--indigo {
+    width: 48vw;
+    height: 48vw;
+    left: -13vw;
+    top: -12vh;
+    background: fade(@primary, 52%);
+  }
+
+  &--violet {
+    width: 42vw;
+    height: 42vw;
+    right: -11vw;
+    top: -8vh;
+    background: fade(@secondary, 48%);
+    animation-delay: -8s;
+  }
+
+  &--cyan {
+    width: 40vw;
+    height: 40vw;
+    left: 16vw;
+    bottom: -22vw;
+    background: fade(@cyan, 44%);
+    animation-delay: -15s;
+  }
+
+  // Warm accent, kept small so the palette stays blue-forward.
+  &--ember {
+    width: 24vw;
+    height: 24vw;
+    right: 11vw;
+    bottom: -13vw;
+    background: fade(@orange, 26%);
+    animation-delay: -21s;
+  }
+}
+
+:root[data-theme='dark'] .login-page__aurora {
+  opacity: .62;
+  filter: blur(110px);
+}
+
+.login-page__mesh {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 62% 48% at 22% 24%, fade(@cyan, 18%), transparent 62%),
+    radial-gradient(ellipse 54% 44% at 82% 18%, fade(@secondary, 20%), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 50% 104%, fade(@primary, 22%), transparent 64%);
+}
+
+// ── 2. Shards: the geometry the card refracts ───────────────────
+// Thin, bright, rotated panes drifting behind the login shell. They are what
+// makes the backdrop-filter visibly *bend* something instead of just dimming a
+// gradient — the single biggest contributor to the liquid read.
+.login-page__shard {
+  position: absolute;
+  border-radius: 42px;
+  border: 1px solid rgba(var(--edge), .5);
+  background: linear-gradient(140deg, rgba(var(--edge), .34), rgba(var(--edge), .04) 52%, transparent);
+  box-shadow: 0 30px 90px rgba(var(--shade), .12);
+  will-change: transform;
+  animation: loginShardFloat 30s @ease-out infinite;
+
+  &--one {
+    width: 30vw;
+    height: 52vh;
+    left: 6vw;
+    top: 10vh;
+    transform: rotate(-19deg);
+  }
+
+  &--two {
+    width: 24vw;
+    height: 40vh;
+    right: 9vw;
+    bottom: 8vh;
+    transform: rotate(14deg);
+    animation-delay: -11s;
+  }
+
+  &--three {
+    width: 15vw;
+    height: 26vh;
+    left: 46vw;
+    top: -6vh;
+    transform: rotate(31deg);
+    animation-delay: -20s;
+  }
+}
+
+:root[data-theme='dark'] .login-page__shard {
+  border-color: rgba(var(--edge), .26);
+  background: linear-gradient(140deg, rgba(var(--edge), .16), rgba(var(--edge), .02) 52%, transparent);
+}
+
+// Fine speckle so the blur has high-frequency detail to smear.
+.login-page__grain {
+  position: absolute;
+  inset: 0;
+  opacity: .5;
+  background-image:
+    radial-gradient(rgba(var(--edge), .5) .6px, transparent .7px),
+    linear-gradient(rgba(var(--edge), .09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--edge), .09) 1px, transparent 1px);
+  background-size: 4px 4px, 58px 58px, 58px 58px;
+  mask-image: radial-gradient(ellipse 72% 62% at 50% 44%, #000 8%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 44%, #000 8%, transparent 78%);
+}
+
+// ── Theme toggle ────────────────────────────────────────────────
+.login-theme-toggle {
+  .button-reset();
+  .glass(@radius-pill, @glass-bg-strong, 18px, @glass-control-shadow);
+  position: absolute;
+  z-index: 3;
+  top: clamp(16px, 2.4vw, 28px);
+  right: clamp(16px, 2.4vw, 28px);
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  color: @text-secondary;
+  transition: transform @duration @ease-out, color @duration @ease-out, box-shadow @duration @ease-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    color: @ink-primary;
+  }
+
+  &:focus-visible { .glass-focus(); }
+}
+
+// ── Shell ───────────────────────────────────────────────────────
+.login-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1140px, 100%);
+  display: grid;
+  grid-template-columns: minmax(360px, 468px) minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(16px, 2.2vw, 30px);
+}
+
+// ── 3. The pane ─────────────────────────────────────────────────
+.login-card,
+.login-preview {
+  position: relative;
+  overflow: hidden;
+  border-radius: 32px;
+  border: 1px solid @glass-border;
+  // Two tints stacked: a directional wash over the base fill reads as a pane
+  // of varying thickness rather than one flat sheet of colour.
+  background:
+    linear-gradient(152deg, rgba(var(--tint), .34), rgba(var(--tint), .06) 46%, rgba(var(--tint), .22)),
+    @glass-bg-strong;
+  backdrop-filter: blur(44px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(44px) saturate(200%) brightness(1.06);
+  box-shadow:
+    0 44px 100px rgba(var(--shade), .24),
+    0 6px 20px rgba(var(--shade), .1),
+    inset 0 1px 0 rgba(var(--edge), .85),
+    inset 0 -22px 44px rgba(var(--edge), .1);
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// Specular reflection across the top-left corner.
+.login-card__sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(142deg, rgba(var(--edge), .5), transparent 46%),
+    radial-gradient(circle at 10% -6%, rgba(var(--edge), .55), transparent 36%);
+}
+
+// Bright inner edge that fades along the pane — the "thickness" cue. A plain
+// 1px border reads as a sticker; a rim that varies reads as a bevelled edge.
+.login-card__rim {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    150deg,
+    rgba(var(--edge), .95) 0%,
+    rgba(var(--edge), .18) 26%,
+    transparent 52%,
+    rgba(var(--edge), .3) 78%,
+    rgba(var(--edge), .8) 100%
+  );
+  // Paint the gradient only in the 1px padding ring, leaving the middle clear.
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+}
+
+// ── 4. Travelling caustic ───────────────────────────────────────
+// A soft band of light that sweeps the pane on a long loop, the way a highlight
+// slides across curved glass. Slow and low-contrast on purpose.
+.login-card__caustic {
+  position: absolute;
+  inset: -40% -60%;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    74deg,
+    transparent 38%,
+    rgba(var(--edge), .3) 47%,
+    rgba(var(--edge), .5) 50%,
+    rgba(var(--edge), .3) 53%,
+    transparent 62%
+  );
+  opacity: .55;
+  will-change: transform;
+  animation: loginCaustic 11s @ease-out infinite;
+}
+
+.login-card {
+  display: grid;
+  align-content: center;
+  gap: clamp(20px, 2.4vw, 28px);
+  padding: clamp(26px, 3.4vw, 44px);
+}
+
+// ── Header ──────────────────────────────────────────────────────
+.login-card__head {
+  display: grid;
+  gap: 10px;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+// Glass plate holding the mark, matching the sidebar lockup.
+.login-brand__mark {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  padding: 7px;
+  border-radius: @radius-md;
+  background: linear-gradient(150deg, rgba(var(--tint), .88), rgba(var(--tint), .42));
+  border: 1px solid rgba(var(--edge), .6);
+  box-shadow:
+    0 10px 26px rgba(var(--shade), .16),
+    inset 0 1px 0 rgba(var(--edge), .85);
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+// The mark's inner crescent is deep navy, so in dark mode the plate stays light
+// rather than tinting down with the theme — otherwise the artwork disappears.
+:root[data-theme='dark'] .login-brand__mark {
+  background: linear-gradient(150deg, rgba(255, 255, 255, .96), rgba(226, 236, 255, .88));
+  border-color: rgba(255, 255, 255, .32);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, .38),
+    inset 0 1px 0 rgba(255, 255, 255, .9);
+}
+
+.login-brand__name {
+  display: grid;
+  gap: 1px;
+  line-height: 1.25;
+
+  strong {
+    color: @text-primary;
+    font-size: @fs-lg;
+    font-weight: @fw-bold;
+    letter-spacing: .15em;
+  }
+
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    letter-spacing: .04em;
+  }
+}
+
+.login-card__eyebrow {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 11px;
+  border-radius: @radius-pill;
+  color: @ink-primary;
+  background: fade(@primary, 11%);
+  border: 1px solid fade(@primary, 24%);
+  box-shadow: inset 0 1px 0 rgba(var(--edge), .5);
+  font-size: @fs-xs;
+  font-weight: @fw-semibold;
+}
+
+.login-card h1 {
+  font-size: clamp(30px, 3.4vw, 42px);
+  font-weight: @fw-bold;
+  letter-spacing: -.03em;
+  line-height: 1.08;
+  color: @text-primary;
+}
+
+.login-card__lede {
+  color: @text-secondary;
+  font-size: @fs-md;
+  line-height: 1.6;
+  max-width: 38ch;
+}
+
+// ── Form ────────────────────────────────────────────────────────
+.login-form {
+  display: grid;
+  gap: 14px;
+}
+
+.login-field {
+  position: relative;
+}
+
+.login-field__icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  color: @text-muted;
+  pointer-events: none;
+  transition: color @duration @ease-out;
+  z-index: 1;
+}
+
+// Inputs are wells cut *into* the pane: darker fill, inset shadow at the top,
+// bright hairline at the bottom. The opposite lighting of the raised card.
+.login-field__input {
+  width: 100%;
+  height: 58px;
+  padding: 20px 16px 6px 46px;
+  color: @text-primary;
+  font-size: @fs-md;
+  font-weight: @fw-medium;
+  border-radius: @radius-md;
+  border: 1px solid @glass-border;
+  background: rgba(var(--tint), .34);
+  outline: 0;
+  box-shadow:
+    inset 0 2px 6px rgba(var(--shade), .09),
+    inset 0 -1px 0 rgba(var(--edge), .6);
+  transition:
+    border-color @duration @ease-out,
+    box-shadow @duration @ease-out,
+    background @duration @ease-out;
+
+  &:hover:not(:disabled) {
+    border-color: @glass-border-strong;
+    background: rgba(var(--tint), .44);
+  }
+
+  &:focus {
+    border-color: fade(@primary, 66%);
+    background: rgba(var(--tint), .6);
+    box-shadow:
+      0 0 0 4px fade(@primary, 16%),
+      inset 0 2px 6px rgba(var(--shade), .07),
+      inset 0 -1px 0 rgba(var(--edge), .8);
+  }
+
+  &:disabled {
+    opacity: .62;
+    cursor: not-allowed;
+  }
+}
+
+.login-field--password .login-field__input {
+  padding-right: 50px;
+}
+
+// Floating label: rests over the field, lifts on focus or once filled.
+// `placeholder=" "` on the input is what makes :placeholder-shown reliable.
+.login-field__label {
+  position: absolute;
+  left: 46px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: @text-muted;
+  font-size: @fs-md;
+  font-weight: @fw-medium;
+  pointer-events: none;
+  transform-origin: left center;
+  transition: transform 180ms @ease-out, color 180ms @ease-out;
+}
+
+.login-field__input:focus ~ .login-field__label,
+.login-field__input:not(:placeholder-shown) ~ .login-field__label {
+  transform: translateY(-22px) scale(.82);
+  color: @ink-primary;
+  font-weight: @fw-semibold;
+}
+
+// The literal placeholder copy, revealed only while the field is focused and
+// still empty — so the label can own the resting state without losing the hint.
+.login-field__hint {
+  position: absolute;
+  left: 47px;
+  bottom: 8px;
+  color: @text-muted;
+  font-size: @fs-sm;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms @ease-out;
+}
+
+.login-field__input:focus:placeholder-shown ~ .login-field__hint {
+  opacity: .72;
+}
+
+.login-field__input:focus ~ .login-field__icon {
+  color: @ink-primary;
+}
+
+.login-field__toggle {
+  .button-reset();
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: @text-muted;
+  transition: color @duration @ease-out, background @duration @ease-out;
+
+  &:hover {
+    color: @ink-primary;
+    background: fade(@primary, 10%);
+  }
+
+  &:focus-visible {
+    outline: 0;
+    color: @ink-primary;
+    box-shadow: 0 0 0 3px fade(@primary, 24%);
+  }
+}
+
+// ── Meta row ────────────────────────────────────────────────────
+.login-form__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: @fs-sm;
+}
+
+.login-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: @text-secondary;
+  font-weight: @fw-medium;
+  cursor: pointer;
+
+  input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  &__box {
+    position: relative;
+    width: 19px;
+    height: 19px;
+    flex: 0 0 auto;
+    border-radius: 7px;
+    border: 1px solid @glass-border-strong;
+    background: rgba(var(--tint), .46);
+    box-shadow: inset 0 1px 3px rgba(var(--shade), .1);
+    transition: background @duration @ease-out, border-color @duration @ease-out, box-shadow @duration @ease-out;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 2px;
+      width: 5px;
+      height: 10px;
+      border: solid @white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg) scale(.4);
+      opacity: 0;
+      transition: transform 180ms @ease-out, opacity 180ms @ease-out;
+    }
+  }
+
+  input:checked + &__box {
+    border-color: transparent;
+    background: @gradient-active;
+    box-shadow: 0 6px 16px fade(@primary, 34%);
+
+    &::after {
+      transform: rotate(45deg) scale(1);
+      opacity: 1;
+    }
+  }
+
+  input:focus-visible + &__box {
+    box-shadow: 0 0 0 4px fade(@primary, 24%);
+  }
+}
+
+.login-form__forgot {
+  .button-reset();
+  color: @ink-primary;
+  font-size: @fs-sm;
+  font-weight: @fw-semibold;
+  border-radius: @radius-sm;
+  transition: opacity @duration @ease-out;
+
+  &:hover { opacity: .78; }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 3px fade(@primary, 24%);
+  }
+}
+
+// ── Inline error ────────────────────────────────────────────────
+.login-inline-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 13px;
+  color: @ink-danger;
+  border-radius: @radius-sm;
+  border: 1px solid fade(@danger, 34%);
+  background: fade(@danger, 10%);
+  box-shadow: inset 0 1px 0 rgba(var(--edge), .4);
+  font-size: @fs-sm;
+  font-weight: @fw-medium;
+  overflow: hidden;
+
+  svg { flex: 0 0 auto; }
+}
+
+// ── Submit ──────────────────────────────────────────────────────
+.login-submit {
+  .button-reset();
+  position: relative;
+  overflow: hidden;
+  height: 54px;
+  margin-top: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border-radius: @radius-md;
+  color: @white;
+  font-size: @fs-lg;
+  font-weight: @fw-semibold;
+  letter-spacing: -.01em;
+  background: linear-gradient(115deg, @primary 0%, @secondary 52%, @cyan 100%);
+  background-size: 200% 100%;
+  box-shadow:
+    0 16px 34px fade(@primary, 36%),
+    inset 0 1px 0 rgba(255, 255, 255, .34);
+  transition:
+    transform @duration @ease-out,
+    box-shadow @duration @ease-out,
+    background-position 420ms @ease-out,
+    opacity @duration @ease-out;
+
+  // Glass highlight sitting on top of the gradient.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 52%;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .26), transparent);
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background-position: 100% 0;
+    box-shadow:
+      0 22px 46px fade(@secondary, 36%),
+      inset 0 1px 0 rgba(255, 255, 255, .4);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(.988);
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 4px fade(@primary, 32%), 0 16px 34px fade(@primary, 30%);
+  }
+
+  &:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  &[data-status='success'] {
+    background: linear-gradient(115deg, @success 0%, @cyan 100%);
+    opacity: 1;
+  }
+
+  &__label,
+  &__arrow,
+  &__spinner {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__arrow {
+    transition: transform @duration @ease-out;
+  }
+
+  &:hover:not(:disabled) &__arrow {
+    transform: translateX(3px);
+  }
+
+  &__spinner {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, .34);
+    border-top-color: @white;
+    animation: loginSpin .72s linear infinite;
+  }
+
+  &__ripple {
+    position: absolute;
+    z-index: 1;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .5);
+    pointer-events: none;
+    animation: loginRipple 600ms @ease-out forwards;
+  }
+}
+
+.login-card__foot {
+  color: @text-muted;
+  font-size: @fs-xs;
+  text-align: center;
+}
+
+// ── Preview pane ────────────────────────────────────────────────
+.login-preview {
+  display: grid;
+  align-content: space-between;
+  gap: clamp(18px, 2.4vw, 30px);
+  padding: clamp(24px, 3vw, 40px);
+}
+
+.login-preview__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.login-preview__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: @radius-pill;
+  color: @text-secondary;
+  background: rgba(var(--tint), .46);
+  border: 1px solid @glass-border;
+  box-shadow: inset 0 1px 0 rgba(var(--edge), .6);
+  font-size: @fs-xs;
+  font-weight: @fw-semibold;
+}
+
+.login-preview__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: @ink-success;
+  font-size: @fs-xs;
+  font-weight: @fw-semibold;
+
+  i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: @success;
+    box-shadow: 0 0 0 0 fade(@success, 60%);
+    animation: loginPulse 2.2s @ease-out infinite;
+  }
+}
+
+// Inner well, lit opposite to the card so it sits *inside* the glass.
+.login-preview__graph {
+  min-height: 240px;
+  display: flex;
+  align-items: flex-end;
+  gap: 7px;
+  padding: 22px;
+  border-radius: @radius-lg;
+  border: 1px solid @glass-border;
+  box-shadow:
+    inset 0 2px 10px rgba(var(--shade), .1),
+    inset 0 -1px 0 rgba(var(--edge), .55);
+  background:
+    linear-gradient(90deg, rgba(var(--edge), .12) 1px, transparent 1px) 0 0 / 16.66% 100%,
+    linear-gradient(0deg, rgba(var(--edge), .12) 1px, transparent 1px) 0 0 / 100% 25%,
+    rgba(var(--tint), .28);
+
+  i {
+    flex: 1;
+    min-width: 4px;
+    border-radius: @radius-pill @radius-pill 4px 4px;
+    background: linear-gradient(180deg, fade(@cyan, 94%), fade(@secondary, 64%));
+    box-shadow: 0 0 22px fade(@cyan, 24%);
+    transform-origin: bottom;
+    animation: loginBars 620ms @ease-out both;
+  }
+}
+
+.login-preview__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 11px;
+
+  article {
+    display: grid;
+    align-content: center;
+    gap: 6px;
+    padding: 15px;
+    border-radius: @radius-md;
+    border: 1px solid @glass-border;
+    background: rgba(var(--tint), .4);
+    box-shadow: inset 0 1px 0 rgba(var(--edge), .62);
+  }
+
+  span {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-medium;
+    .truncate();
+  }
+
+  strong {
+    color: @text-primary;
+    font-size: @fs-xl;
+    font-weight: @fw-bold;
+    letter-spacing: -.02em;
+  }
+
+  small {
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+
+    &[data-tone='up'] { color: @ink-success; }
+    &[data-tone='flat'] { color: @text-muted; }
+  }
+}
+
+// ── Toast ───────────────────────────────────────────────────────
+.login-toast {
+  position: fixed;
+  z-index: 5;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  padding: 12px 18px;
+  color: @text-primary;
+  font-size: @fs-sm;
+  font-weight: @fw-medium;
+  border-radius: @radius-pill;
+  border: 1px solid @glass-border-strong;
+  background: @glass-bg-strong;
+  box-shadow:
+    0 18px 40px rgba(var(--shade), .24),
+    inset 0 1px 0 rgba(var(--edge), .7);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+}
+
+// ── Motion ──────────────────────────────────────────────────────
+@keyframes loginDrift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(4%, -3%, 0) scale(1.08); }
+}
+
+@keyframes loginShardFloat {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(var(--shard-rotate, -19deg)); }
+  50% { transform: translate3d(2.5%, -4%, 0) rotate(var(--shard-rotate, -19deg)); }
+}
+
+@keyframes loginCaustic {
+  0% { transform: translate3d(-42%, 0, 0); }
+  55%, 100% { transform: translate3d(42%, 0, 0); }
+}
+
+@keyframes loginSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes loginRipple {
+  from { transform: scale(1); opacity: .5; }
+  to { transform: scale(26); opacity: 0; }
+}
+
+@keyframes loginBars {
+  from { transform: scaleY(.2); opacity: .3; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+@keyframes loginPulse {
+  0% { box-shadow: 0 0 0 0 fade(@success, 55%); }
+  70% { box-shadow: 0 0 0 8px fade(@success, 0%); }
+  100% { box-shadow: 0 0 0 0 fade(@success, 0%); }
+}
+
+// Each shard keeps its own resting angle through the shared float keyframes.
+.login-page__shard--one { --shard-rotate: -19deg; }
+.login-page__shard--two { --shard-rotate: 14deg; }
+.login-page__shard--three { --shard-rotate: 31deg; }
+
+@media (prefers-reduced-motion: reduce) {
+  .login-page__aurora,
+  .login-page__shard,
+  .login-card__caustic,
+  .login-preview__graph i,
+  .login-preview__live i,
+  .login-submit__ripple {
+    animation: none;
+  }
+}
+
+// ── Responsive ──────────────────────────────────────────────────
+@media (max-width: @breakpoint-laptop) {
+  .login-shell {
+    grid-template-columns: minmax(0, 486px);
+    justify-content: center;
+  }
+
+  .login-preview {
+    display: none;
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .login-page {
+    padding: 12px;
+    place-items: stretch;
+  }
+
+  .login-shell {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: center;
+  }
+
+  .login-card {
+    border-radius: 26px;
+    padding: 26px 20px;
+    gap: 20px;
+  }
+
+  // Shards are tuned for wide viewports; on phones they crowd the card.
+  .login-page__shard--three { display: none; }
+
+  .login-theme-toggle {
+    top: 12px;
+    right: 12px;
+  }
+
+  .login-form__meta {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+}

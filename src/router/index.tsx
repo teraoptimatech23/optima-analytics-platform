@@ -1,6 +1,8 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import DashboardLayout from '@/components/layout/DashboardLayout/DashboardLayout'
+import ProtectedRoute from '@/router/ProtectedRoute'
 import { flattenSidebarItems, legacyRedirects } from '@/components/layout/Sidebar/sidebarItems'
+import Login from '@/pages/Login'
 import Dashboard from '@/pages/Dashboard'
 import CustomerProfile from '@/pages/CustomerProfile'
 import CustomerNeeds from '@/pages/CustomerNeeds'
@@ -55,40 +57,48 @@ const placeholderRoutes = flattenSidebarItems().filter((item) => !implementedRou
 export default function AppRouter() {
   return (
     <Routes>
-      <Route element={<DashboardLayout />}>
-        <Route index element={<Dashboard />} />
-        <Route path="/customer-insights/profil-pelanggan" element={<CustomerProfile />} />
-        <Route path="/customer-insights/kebutuhan-pelanggan" element={<CustomerNeeds />} />
-        <Route path="/customer-insights/pain-points" element={<PainPoints />} />
-        <Route path="/customer-insights/motivasi-pelanggan" element={<CustomerMotivation />} />
-        <Route path="/customer-insights/persepsi-pelanggan" element={<CustomerPerception />} />
-        <Route path="/purchase-analytics/perilaku-pembelian" element={<PurchaseBehaviour />} />
-        <Route path="/purchase-analytics/rfm-analysis" element={<RFMAnalysis />} />
-        <Route path="/purchase-analytics/cohort-analysis" element={<CohortAnalysis />} />
-        <Route path="/purchase-analytics/market-basket" element={<MarketBasket />} />
-        <Route path="/purchase-analytics/customer-journey" element={<CustomerJourney />} />
-        <Route path="/marketing-analytics/google-ads" element={<GoogleAdsAnalytics />} />
-        <Route path="/marketing-analytics/meta-ads" element={<MetaAdsAnalytics />} />
-        <Route path="/marketing-analytics/youtube-ads" element={<YouTubeAdsAnalytics />} />
-        <Route path="/marketing-analytics/campaign-performance" element={<CampaignPerformance />} />
-        <Route path="/marketing-analytics/attribution" element={<Attribution />} />
-        <Route path="/predictive-analytics/churn-prediction" element={<ChurnPrediction />} />
-        <Route path="/predictive-analytics/customer-lifetime-value-prediction" element={<CLVPrediction />} />
-        <Route path="/predictive-analytics/demand-forecast" element={<DemandForecast />} />
-        <Route path="/predictive-analytics/sales-forecast" element={<SalesForecast />} />
-        <Route path="/ai-insight" element={<AIInsight />} />
-        <Route path="/recommendation" element={<Recommendation />} />
-        {placeholderRoutes.map((item) => (
-          <Route
-            key={item.id}
-            path={item.path}
-            element={<PlaceholderPage title={item.label} description={item.description} />}
-          />
-        ))}
-        {Object.entries(legacyRedirects).map(([from, to]) => (
-          <Route key={from} path={from} element={<Navigate to={to} replace />} />
-        ))}
+      {/* The only public route. Everything below sits behind ProtectedRoute. */}
+      <Route path="/login" element={<Login />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route element={<DashboardLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="/customer-insights/profil-pelanggan" element={<CustomerProfile />} />
+          <Route path="/customer-insights/kebutuhan-pelanggan" element={<CustomerNeeds />} />
+          <Route path="/customer-insights/pain-points" element={<PainPoints />} />
+          <Route path="/customer-insights/motivasi-pelanggan" element={<CustomerMotivation />} />
+          <Route path="/customer-insights/persepsi-pelanggan" element={<CustomerPerception />} />
+          <Route path="/purchase-analytics/perilaku-pembelian" element={<PurchaseBehaviour />} />
+          <Route path="/purchase-analytics/rfm-analysis" element={<RFMAnalysis />} />
+          <Route path="/purchase-analytics/cohort-analysis" element={<CohortAnalysis />} />
+          <Route path="/purchase-analytics/market-basket" element={<MarketBasket />} />
+          <Route path="/purchase-analytics/customer-journey" element={<CustomerJourney />} />
+          <Route path="/marketing-analytics/google-ads" element={<GoogleAdsAnalytics />} />
+          <Route path="/marketing-analytics/meta-ads" element={<MetaAdsAnalytics />} />
+          <Route path="/marketing-analytics/youtube-ads" element={<YouTubeAdsAnalytics />} />
+          <Route path="/marketing-analytics/campaign-performance" element={<CampaignPerformance />} />
+          <Route path="/marketing-analytics/attribution" element={<Attribution />} />
+          <Route path="/predictive-analytics/churn-prediction" element={<ChurnPrediction />} />
+          <Route path="/predictive-analytics/customer-lifetime-value-prediction" element={<CLVPrediction />} />
+          <Route path="/predictive-analytics/demand-forecast" element={<DemandForecast />} />
+          <Route path="/predictive-analytics/sales-forecast" element={<SalesForecast />} />
+          <Route path="/ai-insight" element={<AIInsight />} />
+          <Route path="/recommendation" element={<Recommendation />} />
+          {placeholderRoutes.map((item) => (
+            <Route
+              key={item.id}
+              path={item.path}
+              element={<PlaceholderPage title={item.label} description={item.description} />}
+            />
+          ))}
+          {Object.entries(legacyRedirects).map(([from, to]) => (
+            <Route key={from} path={from} element={<Navigate to={to} replace />} />
+          ))}
+        </Route>
       </Route>
+
+      {/* Unknown paths fall back to the dashboard root, which ProtectedRoute
+          then bounces to /login when there is no session. */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   )

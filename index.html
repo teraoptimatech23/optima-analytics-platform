@@ -19,8 +19,11 @@
             return fallback()
           }
         }
+        // Light is the product default: the brand and the glass surfaces are
+        // designed for it. Dark stays available through the topbar toggle, and
+        // a stored choice always wins over this default.
         root.dataset.theme = get('optima-analytics-platform-theme', ['light', 'dark'], function () {
-          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+          return 'light'
         })
         root.dataset.density = get('optima-analytics-platform-density', ['comfortable', 'compact'], function () {
           return 'comfortable'

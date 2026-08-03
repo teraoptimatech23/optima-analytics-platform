@@ -94,43 +94,68 @@
     }
   }
 
+  // Mark + wordmark lockup, matching the brand block on the login screen.
   &__brand {
-    display: grid;
-    padding: 2px 2px 0;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-width: 0;
+    padding: 2px 4px 0;
   }
 
-  // Same glass as every other surface, so it belongs to the theme rather than
-  // sitting on it as a white card.
+  // Same glass as every other surface, so the mark belongs to the theme rather
+  // than sitting on it as a white card.
   &__logo-plate {
+    flex: 0 0 auto;
     display: grid;
     place-items: center;
-    min-width: 0;
-    padding: 10px;
-    border-radius: @radius-lg;
-    background: linear-gradient(150deg, rgba(var(--tint), .82), rgba(var(--tint), .5));
-    border: 1px solid rgba(var(--edge), .55);
+    width: 44px;
+    height: 44px;
+    padding: 7px;
+    border-radius: @radius-md;
+    background: linear-gradient(150deg, rgba(var(--tint), .86), rgba(var(--tint), .48));
+    border: 1px solid rgba(var(--edge), .58);
     box-shadow:
-      0 8px 24px rgba(var(--shade), .12),
-      inset 0 1px 0 rgba(var(--edge), .7);
+      0 8px 22px rgba(var(--shade), .14),
+      inset 0 1px 0 rgba(var(--edge), .75);
   }
 
-  // Both artworks are pre-trimmed (460×253), so they simply fill the plate
-  // width. Only one is ever displayed — see the theme swap below.
   &__logo {
-    grid-area: 1 / 1;
     width: 100%;
     height: auto;
-    border-radius: @radius-sm;
   }
 
-  // Dark-on-white artwork: multiply drops its white field onto the plate.
-  &__logo--light {
-    mix-blend-mode: multiply;
+  // The mark's inner crescent is deep navy, which would vanish against a dark
+  // plate. In dark mode the plate stays light so the artwork keeps its
+  // contrast — a brand chip rather than a tinted panel.
+  :root[data-theme='dark'] &__logo-plate {
+    background: linear-gradient(150deg, rgba(255, 255, 255, .96), rgba(226, 236, 255, .88));
+    border-color: rgba(255, 255, 255, .3);
+    box-shadow:
+      0 10px 24px rgba(0, 0, 0, .34),
+      inset 0 1px 0 rgba(255, 255, 255, .9);
   }
 
-  // Light-ink artwork on real transparency: nothing to blend away.
-  &__logo--dark {
-    display: none;
+  &__wordmark {
+    min-width: 0;
+    display: grid;
+    gap: 1px;
+    line-height: 1.2;
+
+    strong {
+      .truncate();
+      color: @text-primary;
+      font-size: @fs-md;
+      font-weight: @fw-bold;
+      letter-spacing: .15em;
+    }
+
+    small {
+      .truncate();
+      color: @text-muted;
+      font-size: @fs-xs;
+      font-weight: @fw-semibold;
+    }
   }
 
   &__nav {
@@ -290,9 +315,11 @@
     width: @sidebar-collapsed-width;
     padding-inline: 10px;
 
-    // The stacked mark carries wordmark text — illegible at rail width, so the
-    // brand plate steps aside entirely when collapsed.
-    .sidebar__brand,
+    // The mark is a standalone icon, so it survives the rail — only the
+    // wordmark beside it is dropped.
+    .sidebar__brand { justify-content: center; padding-inline: 0; }
+
+    .sidebar__wordmark,
     .sidebar__user-copy,
     .sidebar__user > svg { display: none; }
 
@@ -316,13 +343,6 @@
   }
 }
 
-// Swap the artwork itself rather than filtering it: the dark variant ships with
-// light ink on a transparent field, so it needs no blend mode at all.
-:root[data-theme='dark'] {
-  .sidebar__logo--light { display: none; }
-  .sidebar__logo--dark { display: block; }
-}
-
 @keyframes sidebarSheen {
   0%, 62% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
   70% { opacity: .9; }
@@ -334,7 +354,7 @@
   .sidebar {
     padding-block: 14px;
 
-    &__logo-plate { padding: 8px; }
+    &__logo-plate { width: 40px; height: 40px; padding: 6px; }
   }
 }
 

@@ -41,20 +41,14 @@ export default function Sidebar() {
       <span className="sidebar__glow sidebar__glow--bottom" aria-hidden="true" />
 
       <div className="sidebar__brand">
-        {/* Two artworks, swapped by CSS: the dark one is a transparent
-            light-ink variant, so neither theme needs a filter. */}
+        {/* One artwork for both themes: the mark ships on real transparency, so
+            it needs no blend mode and no dark-mode variant. */}
         <span className="sidebar__logo-plate">
-          <img
-            className="sidebar__logo sidebar__logo--light"
-            src="/assets/tera-optima-logo.png"
-            alt="Tera Optima Teknologi"
-          />
-          <img
-            className="sidebar__logo sidebar__logo--dark"
-            src="/assets/tera-optima-logo-dark.png"
-            alt=""
-            aria-hidden="true"
-          />
+          <img className="sidebar__logo" src="/assets/optima-logo.png" alt="Optima Analytics Platform" />
+        </span>
+        <span className="sidebar__wordmark">
+          <strong>OPTIMA</strong>
+          <small>Analytics Platform</small>
         </span>
       </div>
 

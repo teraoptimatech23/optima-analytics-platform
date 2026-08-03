@@ -2,6 +2,7 @@ import {
   AlignVerticalSpaceAround,
   AlignVerticalSpaceBetween,
   Bell,
+  LogOut,
   Menu,
   Moon,
   PanelLeft,
@@ -10,8 +11,10 @@ import {
   Share2,
   Sun,
 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import Button from '@/components/common/Button/Button'
 import FilterBar from '@/components/layout/FilterBar/FilterBar'
+import { useAuthStore } from '@/store/useAuthStore'
 import { useDensity } from '@/hooks/useDensity'
 import { useTheme } from '@/hooks/useTheme'
 import { useAppStore } from '@/store/useAppStore'
@@ -29,6 +32,15 @@ export default function Topbar() {
   const { density, toggleDensity } = useDensity()
   const loading = useDashboardStore((state) => state.loading)
   const cube = useDashboardStore((state) => state.cube)
+  const logout = useAuthStore((state) => state.logout)
+  const navigate = useNavigate()
+
+  // Clearing the session flips ProtectedRoute, but navigating explicitly keeps
+  // the transition deliberate instead of relying on a redirect bounce.
+  const handleLogout = () => {
+    logout()
+    navigate('/login', { replace: true })
+  }
 
   return (
     <header className="topbar">
@@ -98,6 +110,15 @@ export default function Topbar() {
             <Share2 size={16} strokeWidth={1.9} />
             <span className="topbar__share-label">Bagikan Laporan</span>
           </Button>
+
+          <button
+            className="topbar__icon-button topbar__logout"
+            type="button"
+            onClick={handleLogout}
+            aria-label="Keluar dari akun"
+          >
+            <LogOut size={17} strokeWidth={1.9} />
+          </button>
         </div>
       </div>
     </header>

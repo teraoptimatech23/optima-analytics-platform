@@ -5,8 +5,14 @@ export type Theme = 'light' | 'dark'
 
 const THEMES = ['light', 'dark'] as const
 
-function systemTheme(): Theme {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+/**
+ * Light is the product default rather than the OS preference — the brand and
+ * the glass surfaces are tuned for it. This only applies on a first visit;
+ * once the user toggles, their stored choice wins (see useHtmlPreference).
+ * Kept in sync with the pre-paint script in index.html.
+ */
+function defaultTheme(): Theme {
+  return 'light'
 }
 
 export function useTheme() {
@@ -14,7 +20,7 @@ export function useTheme() {
     'theme',
     'optima-analytics-platform-theme',
     THEMES,
-    systemTheme,
+    defaultTheme,
   )
 
   const toggleTheme = useCallback(() => {

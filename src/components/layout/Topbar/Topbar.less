@@ -121,6 +121,13 @@
     box-shadow: 0 4px 12px fade(@danger, 34%);
   }
 
+  // Sign-out is the only destructive control up here, so it warms to danger on
+  // hover rather than to the usual brand blue.
+  &__logout:hover {
+    color: @ink-danger;
+    border-color: fade(@danger, 34%);
+  }
+
   // Sidebar toggle lives at the far left of the header, ahead of the filters.
   &__collapse {
     flex: 0 0 auto;
