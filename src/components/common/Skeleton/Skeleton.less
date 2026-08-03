@@ -1,0 +1,13 @@
+.skeleton {
+  display: block;
+  flex: 0 0 auto;
+  background:
+    linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-peak) 37%, var(--skeleton-base) 63%);
+  background-size: 400% 100%;
+  animation: skeletonSweep 1.4s ease-in-out infinite;
+}
+
+@keyframes skeletonSweep {
+  from { background-position: 100% 50%; }
+  to { background-position: 0 50%; }
+}

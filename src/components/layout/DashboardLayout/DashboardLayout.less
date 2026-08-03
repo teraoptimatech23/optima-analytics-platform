@@ -1,0 +1,166 @@
+@import '@/styles/mixins.less';
+
+.dashboard-layout {
+  width: 100%;
+  height: 100dvh;
+  display: grid;
+  // The first track follows the sidebar's own width: transitioning
+  // grid-template-columns freezes at its start value in Chrome, so the
+  // collapse animation lives on `.sidebar { width }` instead.
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: @shell-gutter;
+  padding: @shell-gutter;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 86% 12%, var(--glow-a), transparent 32%),
+    radial-gradient(circle at 62% -4%, var(--glow-b), transparent 36%),
+    radial-gradient(circle at 8% 72%, var(--glow-c), transparent 38%),
+    var(--canvas);
+
+  &__scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  // A single flowing wave that sweeps from the sidebar across the canvas.
+  &__blob {
+    &--one {
+      left: -14%;
+      top: 8%;
+      width: 46%;
+      height: 78%;
+      border-radius: 48% 52% 56% 44% / 42% 58% 42% 58%;
+      background: linear-gradient(128deg, rgba(var(--tint), 0.78), fade(@primary, 22%) 52%, fade(@cyan, 16%));
+      opacity: .55;
+      animation: floatSoft 18s ease-in-out infinite;
+    }
+
+    &--two {
+      right: -10%;
+      top: -6%;
+      width: 44%;
+      height: 62%;
+      border-radius: 58% 42% 46% 54% / 52% 42% 58% 48%;
+      background: linear-gradient(150deg, rgba(var(--tint), 0.62), fade(@secondary, 24%) 48%, fade(@cyan, 18%));
+      opacity: .5;
+      animation: floatSoft 22s ease-in-out infinite reverse;
+    }
+
+    &--three {
+      right: 6%;
+      bottom: -12%;
+      width: 38%;
+      height: 46%;
+      background: linear-gradient(120deg, fade(@cyan, 20%), fade(@primary, 18%) 60%, transparent);
+      opacity: .42;
+      animation: floatSoft 26s ease-in-out infinite;
+    }
+  }
+
+  &__ring {
+    right: -6%;
+    top: 8%;
+    width: 62%;
+    height: 230px;
+    transform: rotate(-7deg);
+  }
+
+  &__main {
+    min-width: 0;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  &__scroller {
+    .scroll-thin();
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+  }
+
+  &__inner {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-width: 0;
+    padding: 0 @container-padding @container-padding;
+
+    // Focus target for the skip link; never draws a ring on click.
+    &:focus { outline: 0; }
+  }
+
+  &__scrim,
+  &__mobile-drawer {
+    display: none;
+  }
+}
+
+@media (max-width: @breakpoint-laptop) {
+  .dashboard-layout {
+    gap: 14px;
+    padding: 14px;
+
+    &__inner { padding: 0 @space-5 @space-5; }
+  }
+}
+
+@media (max-width: @breakpoint-tablet) {
+  .dashboard-layout {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 12px;
+
+    > .sidebar { display: none; }
+
+    &__scrim {
+      .button-reset();
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: block;
+      pointer-events: none;
+      opacity: 0;
+      background: rgba(var(--shade), .42);
+      backdrop-filter: blur(4px);
+      transition: opacity @duration @ease-out;
+    }
+
+    &__scrim--open {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    &__mobile-drawer {
+      position: fixed;
+      inset: 12px auto 12px 12px;
+      z-index: 41;
+      width: min(280px, calc(100vw - 40px));
+      display: block;
+      transform: translateX(calc(-100% - 24px));
+      transition: transform 260ms @ease-out;
+
+      .sidebar { display: flex; height: 100%; }
+    }
+
+    &__mobile-drawer--open { transform: translateX(0); }
+
+    &__inner { padding: 0 @space-4 @space-5; }
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .dashboard-layout {
+    padding: 10px;
+
+    &__inner { padding: 0 @space-3 @space-4; }
+  }
+}

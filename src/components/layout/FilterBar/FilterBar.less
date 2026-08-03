@@ -1,0 +1,16 @@
+// Always a single row. Where the pills exceed the header width they scroll
+// horizontally rather than wrapping onto a second line.
+.filter-bar {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 9px;
+  padding: 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { height: 0; }
+}

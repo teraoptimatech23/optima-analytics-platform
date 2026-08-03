@@ -1,0 +1,27 @@
+@import '@/styles/mixins.less';
+
+.glass-card {
+  .glass-card();
+  .glass-sheen(.5);
+  display: flex;
+  flex-direction: column;
+  padding: @card-padding;
+  transition: box-shadow @duration @ease-out, border-color @duration @ease-out;
+
+  &:hover {
+    border-color: @glass-border-strong;
+    box-shadow: @glass-shadow-hover;
+  }
+
+  // Denser padding for the KPI row; still follows the density switch.
+  &--compact {
+    padding: calc(@card-padding * .8) @card-padding;
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .glass-card {
+    padding: 18px;
+    border-radius: @radius-lg;
+  }
+}

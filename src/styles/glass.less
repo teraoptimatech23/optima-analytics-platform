@@ -1,0 +1,29 @@
+// Free-floating liquid shapes used for the abstract background scenery.
+// Purely decorative — always render behind content with pointer-events: none.
+.liquid-blob {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 52% 48% 38% 62% / 54% 40% 60% 46%;
+  filter: blur(28px);
+  opacity: .7;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.liquid-ring {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 18px solid rgba(var(--edge), 0.26);
+  box-shadow:
+    0 0 45px rgba(var(--tint), 0.25),
+    inset 0 0 35px fade(@primary, 14%);
+  filter: blur(1px);
+}
+
+.glass-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, fade(@primary, 16%), transparent);
+}

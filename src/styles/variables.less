@@ -1,0 +1,120 @@
+// ── Brand palette ────────────────────────────────────────────────
+@primary: #2f73ff;
+@primary-dark: var(--acc-strong); // deep blue in light, soft blue in dark
+@primary-soft: #dceaff;
+@secondary: #7d55f5;
+@secondary-soft: #eee8ff;
+@cyan: #25c4df;
+@cyan-soft: #ddf8ff;
+@orange: #ff9b3d;
+@orange-soft: #fff0df;
+@danger: #ef4e5b;
+@success: #1c9b68;
+@white: #ffffff;
+
+@gradient-active: linear-gradient(105deg, #277eff 0%, #3f73ff 42%, #6c45f2 100%);
+@gradient-brand: linear-gradient(135deg, @primary, @secondary);
+
+// Text-safe counterparts of the accent hues: every one clears 4.5:1 on card
+// glass in both themes. Use these whenever a hue carries words or a small
+// glyph; the raw colours above stay for fills, bars and large shapes.
+// Values live in theme.less so they can flip at runtime.
+@ink-primary: var(--acc-primary);
+@ink-purple: var(--acc-purple);
+@ink-cyan: var(--acc-cyan);
+@ink-orange: var(--acc-orange);
+@ink-danger: var(--acc-danger);
+@ink-success: var(--acc-success);
+
+// Hairlines between rows — a brand-tinted line in light, a cool grey in dark.
+@line: var(--line);
+@line-strong: var(--line-strong);
+
+// ── Surfaces ─────────────────────────────────────────────────────
+@background: var(--canvas-solid);
+@surface: rgba(var(--tint), .55);
+@surface-strong: rgba(var(--tint), .72);
+@border-glass: rgba(var(--edge), .48);
+
+// Apple-style glass: translucent tint, heavy blur, hairline light border.
+// `--tint` and `--shade` flip with the theme (see theme.less).
+@glass-bg: rgba(var(--tint), .45);
+@glass-bg-strong: rgba(var(--tint), .62);
+@glass-bg-weak: rgba(var(--tint), .28);
+@glass-blur: 24px;
+@glass-brd: rgba(var(--edge), .5);
+@glass-shadow: 0 8px 30px rgba(var(--shade), .12);
+@glass-shadow-hover: 0 16px 40px rgba(var(--shade), .16);
+
+@glass-surface: rgba(var(--tint), .56);
+@glass-surface-weak: rgba(var(--tint), .3);
+@glass-surface-strong: rgba(var(--tint), .76);
+@glass-border: rgba(var(--edge), .52);
+@glass-border-strong: rgba(var(--edge), .72);
+@glass-highlight: rgba(var(--edge), .78);
+@glass-control-shadow: 0 6px 20px rgba(var(--shade), .1), inset 0 1px 0 rgba(var(--edge), .8);
+@glass-focus-shadow: 0 0 0 4px rgba(47, 115, 255, .3), 0 12px 26px rgba(var(--shade), .18);
+
+// ── Typography ───────────────────────────────────────────────────
+@font-sans: 'Inter', 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+@fw-regular: 400;
+@fw-medium: 500;
+@fw-semibold: 600;
+@fw-bold: 700;
+
+// Six steps, floor at 11px. Nothing in the UI may go below @fs-xs.
+@fs-xs: 11px;    // captions, table cells, axis labels
+@fs-sm: 12px;    // body copy, list rows, nav
+@fs-md: 13px;    // card titles, emphasised rows
+@fs-lg: 15px;    // sub-headings
+@fs-xl: 19px;    // in-card figures
+@fs-2xl: clamp(26px, 2.1vw, 32px);   // hero metrics
+@fs-display: clamp(28px, 2.9vw, 40px); // page title only
+
+@text-primary: var(--ink-1);
+@text-secondary: var(--ink-2);
+@text-muted: var(--ink-3); // 4.52:1 on card glass in both themes
+
+// ── Radius & elevation ───────────────────────────────────────────
+@radius-container: 32px;
+@radius-card: 26px;
+@radius-lg: 24px;
+@radius-md: 16px;
+@radius-sm: 12px;
+@radius-pill: 999px;
+@shadow-soft: 0 18px 46px rgba(61, 95, 178, .16);
+@shadow-card: @glass-shadow;
+@shadow-active: 0 12px 26px rgba(47, 115, 255, .32);
+
+// ── Layout ───────────────────────────────────────────────────────
+@sidebar-width: 250px;
+@sidebar-collapsed-width: 92px;
+// Driven by the density switch — see theme.less.
+@shell-gutter: var(--shell-gutter);
+@container-padding: var(--container-pad);
+@grid-gap: var(--gap);
+@card-padding: var(--card-pad);
+@row-gap: var(--row-gap);
+
+@space-1: 4px;
+@space-2: 8px;
+@space-3: 12px;
+@space-4: 16px;
+@space-5: 24px;
+@space-6: 32px;
+
+// ── Motion ───────────────────────────────────────────────────────
+@ease-out: cubic-bezier(.22, .68, .32, 1);
+@duration: 200ms;
+
+// ── Breakpoints ──────────────────────────────────────────────────
+// Header sizing thresholds. Above `@filter-label-min` the pills still fit with
+// their "Periode / Outlet / …" prefix; below `@filter-compact-max` the header
+// sheds its icons, timestamp and button label to keep the pills on one row.
+@filter-label-min: 1700px;
+@filter-compact-max: 1800px;
+
+@breakpoint-wide: 1500px;
+@breakpoint-laptop: 1240px;
+@breakpoint-tablet: 980px;
+@breakpoint-mobile: 680px;

@@ -1,0 +1,70 @@
+@import '@/styles/mixins.less';
+
+.profile-card {
+  &__list {
+    .stack-rows(2px);
+  }
+}
+
+.profile-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 96px;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+
+  & + & {
+    border-top: 1px solid @line;
+  }
+
+  &__copy {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+
+    strong {
+      .truncate();
+      font-size: @fs-sm;
+      font-weight: @fw-semibold;
+    }
+
+    span {
+      .truncate();
+      font-size: @fs-xs;
+      font-weight: @fw-regular;
+      color: @text-muted;
+    }
+  }
+
+  &__metric {
+    display: grid;
+    gap: 6px;
+    justify-items: end;
+
+    strong {
+      font-size: @fs-xl;
+      font-weight: @fw-bold;
+      line-height: 1;
+      letter-spacing: -.02em;
+      color: @ink-primary;
+    }
+
+    .progress { width: 100%; }
+
+    &--purple strong { color: @ink-purple; }
+    &--cyan strong { color: @ink-cyan; }
+    &--orange strong { color: @ink-orange; }
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .profile-row {
+    grid-template-columns: auto minmax(0, 1fr);
+
+    &__metric {
+      grid-column: 2;
+      width: 100%;
+      justify-items: start;
+    }
+  }
+}

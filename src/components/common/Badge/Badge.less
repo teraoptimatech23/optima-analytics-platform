@@ -1,0 +1,20 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 21px;
+  padding: 0 10px;
+  border-radius: @radius-pill;
+  border: 1px solid rgba(var(--edge), 0.55);
+  font-size: @fs-xs;
+  font-weight: @fw-semibold;
+  line-height: 1;
+  white-space: nowrap;
+
+  &--blue { color: @primary-dark; background: fade(@primary, 12%); }
+  &--purple { color: @ink-purple; background: fade(@secondary, 13%); }
+  &--cyan { color: @ink-cyan; background: fade(@cyan, 14%); }
+  &--orange { color: @ink-orange; background: fade(@orange, 18%); }
+  &--red { color: @white; background: linear-gradient(135deg, @danger, lighten(@danger, 8%)); border-color: rgba(var(--edge), 0.4); }
+  &--green { color: @ink-success; background: fade(@success, 11%); }
+  &--neutral { color: @text-secondary; background: rgba(var(--tint), 0.62); }
+}

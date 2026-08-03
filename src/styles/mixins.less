@@ -1,0 +1,132 @@
+// Core glass recipe — every translucent surface in the app derives from this.
+.glass(@radius: @radius-card, @bg: @glass-bg, @blur: @glass-blur, @shadow: @glass-shadow) {
+  background: @bg;
+  border: 1px solid @glass-brd;
+  border-radius: @radius;
+  box-shadow: @shadow;
+  backdrop-filter: blur(@blur) saturate(150%);
+  -webkit-backdrop-filter: blur(@blur) saturate(150%);
+}
+
+.glass-surface(@radius: @radius-lg, @blur: @glass-blur, @shadow: @glass-shadow) {
+  .glass(@radius, @glass-bg, @blur, @shadow);
+}
+
+.glass-card() {
+  .glass(@radius-card);
+}
+
+.glass-control() {
+  .glass(@radius-pill, @glass-bg-strong, 18px, @glass-control-shadow);
+}
+
+// Soft specular sheen along the top-left edge, like light hitting frosted glass.
+.glass-sheen(@opacity: .55) {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background:
+      linear-gradient(135deg, rgba(var(--edge), 0.5), transparent 42%),
+      radial-gradient(circle at 16% 0%, rgba(var(--edge), 0.58), transparent 30%);
+    opacity: @opacity;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.glass-highlight-layer() {
+  .glass-sheen(.62);
+}
+
+.button-reset() {
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.icon-bubble(@size, @color: @primary) {
+  width: @size;
+  height: @size;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: @color;
+  background: linear-gradient(145deg, rgba(var(--edge), 0.22), fade(@color, 18%));
+  box-shadow:
+    0 8px 18px fade(@color, 22%),
+    inset 0 1px 0 rgba(var(--edge), 0.95);
+}
+
+// Shared hover behaviour: 2px lift + slightly deeper shadow, 200ms.
+.hover-lift(@y: -2px) {
+  transition:
+    transform @duration @ease-out,
+    box-shadow @duration @ease-out,
+    border-color @duration @ease-out,
+    background @duration @ease-out;
+
+  &:hover {
+    transform: translateY(@y);
+    box-shadow: @glass-shadow-hover;
+  }
+}
+
+.interactive-lift() {
+  .hover-lift(-2px);
+}
+
+.glass-focus() {
+  outline: 0;
+  border-color: @glass-border-strong;
+  box-shadow: @glass-focus-shadow;
+}
+
+.glass-control-base() {
+  .glass-control();
+  min-height: 42px;
+  color: @text-primary;
+  .hover-lift(-2px);
+
+  &:focus-visible {
+    .glass-focus();
+  }
+}
+
+// Vertical rhythm for the stacked "label + bar + value" rows most cards use.
+.stack-rows(@gap: @row-gap) {
+  display: grid;
+  gap: @gap;
+  align-content: start;
+}
+
+.truncate() {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scroll-thin() {
+  scrollbar-width: thin;
+  scrollbar-color: fade(@primary, 30%) transparent;
+
+  &::-webkit-scrollbar { width: 8px; height: 8px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: @radius-pill;
+    background: linear-gradient(fade(@primary, 42%), fade(@secondary, 34%));
+    background-clip: padding-box;
+  }
+}

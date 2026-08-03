@@ -1,0 +1,42 @@
+@import '@/styles/mixins.less';
+
+// Transparent wrapper: the sections stay direct children of the page grid.
+.dashboard-skeleton {
+  display: contents;
+}
+
+.skeleton-card {
+  gap: @space-4;
+
+  &--kpi {
+    min-height: 126px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: center;
+    gap: 0 12px;
+  }
+
+  &__stack {
+    display: grid;
+    align-content: center;
+    gap: 8px;
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__rows {
+    display: grid;
+    gap: 14px;
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+  }
+}

@@ -1,0 +1,137 @@
+@import '@/styles/mixins.less';
+
+.sidebar-item {
+  .button-reset();
+  position: relative;
+  min-width: 0;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  color: @text-secondary;
+  text-decoration: none;
+  border-radius: @radius-md;
+  border: 1px solid transparent;
+  transition:
+    color @duration @ease-out,
+    background @duration @ease-out,
+    border-color @duration @ease-out,
+    box-shadow @duration @ease-out,
+    transform @duration @ease-out;
+
+  &__icon,
+  &__label {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__icon {
+    flex: 0 0 auto;
+    transition: transform @duration @ease-out, filter @duration @ease-out;
+  }
+
+  &__label {
+    .truncate();
+    font-size: @fs-sm;
+    font-weight: @fw-medium;
+  }
+
+  // Frosted pill that materialises under the cursor.
+  &:not(.sidebar-item--active):hover {
+    color: @primary-dark;
+    background: linear-gradient(145deg, rgba(var(--tint), 0.82), rgba(var(--tint), 0.44));
+    border-color: rgba(var(--edge), 0.88);
+    box-shadow:
+      0 8px 20px rgba(var(--shade), .12),
+      inset 0 1px 0 rgba(var(--edge), 0.96);
+    transform: translateY(-1px);
+
+    .sidebar-item__icon { transform: scale(1.08); }
+  }
+
+  &:focus-visible { .glass-focus(); }
+
+  // Shared highlight — position is animated by Framer, styling lives here.
+  &__indicator {
+    position: absolute;
+    // -1px so the pill covers the button's transparent border box exactly.
+    inset: -1px;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: @radius-md;
+    background: @gradient-active;
+    border: 1px solid rgba(var(--edge), 0.52);
+    box-shadow:
+      0 14px 30px fade(@primary, 42%),
+      0 2px 6px fade(@secondary, 28%),
+      inset 0 1px 0 rgba(var(--edge), 0.58),
+      inset 0 -3px 8px rgba(46, 28, 140, .3);
+
+    // Glossy cap over the top half of the pill.
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 1px 8px auto;
+      height: 48%;
+      border-radius: @radius-md @radius-md 60% 60% / @radius-md @radius-md 100% 100%;
+      background: linear-gradient(180deg, rgba(var(--edge), 0.4), transparent);
+    }
+
+    // Bright liquid pooling behind the icon.
+    &::after {
+      content: '';
+      position: absolute;
+      left: -6%;
+      top: -40%;
+      width: 52%;
+      height: 180%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 50%, rgba(var(--edge), 0.4), transparent 62%);
+      filter: blur(9px);
+    }
+  }
+
+  &--active {
+    color: @white;
+
+    .sidebar-item__label { font-weight: @fw-semibold; }
+
+    .sidebar-item__icon {
+      color: @white;
+      filter: drop-shadow(0 2px 4px rgba(24, 14, 92, .35));
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+
+      .sidebar-item__indicator {
+        box-shadow:
+          0 18px 34px fade(@primary, 48%),
+          inset 0 1px 0 rgba(var(--edge), 0.64),
+          inset 0 -3px 8px rgba(46, 28, 140, .3);
+      }
+    }
+  }
+
+  &--nested {
+    min-height: 39px;
+    padding-inline: 10px;
+
+    .sidebar-item__icon {
+      width: 17px;
+      height: 17px;
+    }
+
+    .sidebar-item__label {
+      font-size: 12px;
+    }
+  }
+}
+
+.sidebar--collapsed .sidebar-item {
+  justify-content: center;
+  padding-inline: 0;
+
+  &__label { display: none; }
+}

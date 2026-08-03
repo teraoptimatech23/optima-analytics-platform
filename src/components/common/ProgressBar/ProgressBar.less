@@ -1,0 +1,44 @@
+.progress {
+  width: 100%;
+  height: 7px;
+  overflow: hidden;
+  border-radius: @radius-pill;
+  background: var(--track);
+  box-shadow: inset 0 1px 2px rgba(var(--shade), .06);
+
+  &--sm { height: 5px; }
+
+  &__fill {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, @primary, lighten(@primary, 12%));
+    box-shadow: 0 1px 6px fade(@primary, 34%);
+    transition: width 420ms @ease-out;
+  }
+
+  &--purple .progress__fill {
+    background: linear-gradient(90deg, @secondary, #a884ff);
+    box-shadow: 0 1px 6px fade(@secondary, 34%);
+  }
+
+  &--cyan .progress__fill {
+    background: linear-gradient(90deg, @cyan, lighten(@cyan, 14%));
+    box-shadow: 0 1px 6px fade(@cyan, 34%);
+  }
+
+  &--orange .progress__fill {
+    background: linear-gradient(90deg, @orange, #ffc078);
+    box-shadow: 0 1px 6px fade(@orange, 34%);
+  }
+
+  &--green .progress__fill {
+    background: linear-gradient(90deg, @success, lighten(@success, 14%));
+    box-shadow: 0 1px 6px fade(@success, 30%);
+  }
+
+  &--red .progress__fill {
+    background: linear-gradient(90deg, @danger, lighten(@danger, 12%));
+    box-shadow: 0 1px 6px fade(@danger, 30%);
+  }
+}

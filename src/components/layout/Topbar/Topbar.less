@@ -1,0 +1,176 @@
+@import '@/styles/mixins.less';
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  padding: 14px @container-padding 12px;
+
+  // Only a whisper of a fade so scrolling content doesn't hard-clip at the edge.
+  background: linear-gradient(180deg, rgba(var(--shade), .12) 0 45%, transparent);
+
+  // The header itself is a glass pane, not just floating controls.
+  &__bar {
+    .glass(@radius-container, rgba(var(--tint), 0.46), 30px, 0 10px 34px rgba(var(--shade), .14));
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: @space-4;
+    min-width: 0;
+    padding: 10px 12px 10px 18px;
+    overflow: hidden;
+    border-color: @glass-border-strong;
+    box-shadow:
+      0 10px 34px rgba(var(--shade), .14),
+      inset 0 1px 0 rgba(var(--edge), 0.95),
+      inset 0 -1px 0 rgba(var(--edge), 0.38);
+
+    // Specular band running along the top edge of the pane.
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto;
+      height: 58%;
+      z-index: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(var(--edge), 0.38), transparent);
+    }
+
+    > * {
+      position: relative;
+      z-index: 1;
+    }
+  }
+
+  &__glow {
+    position: absolute;
+    z-index: 0;
+    left: 12%;
+    top: -160%;
+    width: 46%;
+    height: 420%;
+    pointer-events: none;
+    border-radius: 52% 48% 38% 62% / 54% 40% 60% 46%;
+    background:
+      radial-gradient(circle at 38% 50%, fade(@primary, 26%), transparent 62%),
+      radial-gradient(circle at 74% 46%, fade(@cyan, 22%), transparent 58%);
+    filter: blur(30px);
+    opacity: .8;
+    animation: floatSoft 24s ease-in-out infinite;
+  }
+
+  &__actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__updated {
+    display: grid;
+    gap: 2px;
+    text-align: right;
+    white-space: nowrap;
+
+    span { font-size: @fs-xs; color: @text-muted; font-weight: @fw-medium; }
+    strong { font-size: @fs-xs; font-weight: @fw-semibold; }
+  }
+
+  &__icon-button,
+  &__mobile-menu {
+    .button-reset();
+    .hover-lift(-2px);
+    position: relative;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    overflow: visible;
+    border-radius: 50%;
+    color: @text-secondary;
+    background: linear-gradient(145deg, rgba(var(--tint), 0.82), rgba(var(--tint), 0.44));
+    border: 1px solid rgba(var(--edge), 0.78);
+    box-shadow:
+      0 6px 18px rgba(var(--shade), .12),
+      inset 0 1px 0 rgba(var(--edge), 0.96),
+      inset 0 -2px 6px fade(@primary, 7%);
+
+    &:hover {
+      color: @primary;
+      background: linear-gradient(145deg, rgba(var(--tint), 0.92), rgba(var(--tint), 0.58));
+    }
+
+    &:focus-visible { .glass-focus(); }
+  }
+
+  &__badge {
+    position: absolute;
+    right: -3px;
+    top: -3px;
+    min-width: 19px;
+    height: 19px;
+    display: grid;
+    place-items: center;
+    padding: 0 5px;
+    border-radius: @radius-pill;
+    color: @white;
+    background: linear-gradient(135deg, @danger, lighten(@danger, 8%));
+    border: 2px solid rgba(var(--edge), 0.78);
+    font-size: @fs-xs;
+    font-weight: @fw-bold;
+    box-shadow: 0 4px 12px fade(@danger, 34%);
+  }
+
+  // Sidebar toggle lives at the far left of the header, ahead of the filters.
+  &__collapse {
+    flex: 0 0 auto;
+    color: @primary-dark;
+  }
+
+  &__mobile-menu { display: none; }
+}
+
+// Both dropped early so the filter pills keep the whole left side.
+@media (max-width: @filter-compact-max) {
+  .topbar {
+    &__updated { display: none; }
+
+    &__share {
+      width: 42px;
+      padding: 0;
+    }
+
+    &__share-label { display: none; }
+  }
+}
+
+@media (max-width: @breakpoint-laptop) {
+  .topbar { padding-inline: @space-5; }
+}
+
+@media (max-width: @breakpoint-tablet) {
+  .topbar {
+    padding-inline: @space-4;
+
+    &__bar { gap: @space-2; padding-inline: 10px; }
+    &__mobile-menu { display: grid; }
+    &__collapse { display: none; }
+    &__share { display: none; }
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .topbar {
+    padding-inline: @space-3;
+
+    &__bar { border-radius: @radius-lg; }
+
+    // Comfortable touch targets on phones.
+    &__icon-button,
+    &__mobile-menu {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#eef4ff" />
+    <meta name="description" content="Optima Analytics Platform customer insight dashboard" />
+    <title>Optima Analytics Platform</title>
+    <script>
+      // Resolve display preferences before first paint: no flash of the wrong
+      // theme, no reflow when density kicks in. theme.less holds the values.
+      (function () {
+        var root = document.documentElement
+        var get = function (key, allowed, fallback) {
+          try {
+            var stored = localStorage.getItem(key)
+            return allowed.indexOf(stored) !== -1 ? stored : fallback()
+          } catch (e) {
+            return fallback()
+          }
+        }
+        root.dataset.theme = get('optima-analytics-platform-theme', ['light', 'dark'], function () {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        })
+        root.dataset.density = get('optima-analytics-platform-density', ['comfortable', 'compact'], function () {
+          return 'comfortable'
+        })
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

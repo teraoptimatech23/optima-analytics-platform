@@ -1,0 +1,66 @@
+@import '@/styles/mixins.less';
+
+.pain-card {
+  &__list {
+    .stack-rows(10px);
+  }
+}
+
+.pain-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: @radius-md;
+  background: var(--inset-surface);
+  border: 1px solid rgba(var(--edge), 0.55);
+  transition: background @duration @ease-out, transform @duration @ease-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: var(--inset-surface-strong);
+  }
+
+  &__icon {
+    .icon-bubble(30px, @danger);
+    border-radius: @radius-sm;
+  }
+
+  &__copy {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+
+    strong {
+      font-size: @fs-xs;
+      font-weight: @fw-semibold;
+      line-height: 1.35;
+    }
+
+    span {
+      font-size: @fs-xs;
+      color: @text-muted;
+    }
+  }
+
+  &__loss {
+    grid-column: 2 / -1;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: @space-2;
+
+    span { font-size: @fs-xs; color: @text-muted; }
+
+    strong {
+      font-size: @fs-lg;
+      font-weight: @fw-bold;
+      color: @ink-danger;
+      letter-spacing: -.02em;
+    }
+  }
+
+  &--orange .pain-row__icon { .icon-bubble(30px, @orange); border-radius: @radius-sm; }
+  &--cyan .pain-row__icon { .icon-bubble(30px, @cyan); border-radius: @radius-sm; }
+}

@@ -1,0 +1,105 @@
+// Runtime theme layer. Less handles the brand hues at build time; everything
+// that differs between light and dark lives here as a CSS custom property.
+//
+//   --tint   glass tint, as an RGB triplet so any alpha can be applied
+//   --shade  shadow hue, same triplet trick
+//   --ink-*  text, --acc-* accents that carry words, --line hairlines
+
+// ── Density ──────────────────────────────────────────────────────
+// Spacing that the "Nyaman / Rapat" switch drives. Colours below are unrelated
+// and stay whatever the theme sets.
+:root {
+  --gap: 24px;
+  --card-pad: 22px;
+  --container-pad: 32px;
+  --shell-gutter: 18px;
+  --row-gap: 14px;
+}
+
+:root[data-density='compact'] {
+  --gap: 14px;
+  --card-pad: 15px;
+  --container-pad: 20px;
+  --shell-gutter: 12px;
+  --row-gap: 9px;
+}
+
+// ── Theme ────────────────────────────────────────────────────────
+:root {
+  --tint: 255, 255, 255;
+  --edge: 255, 255, 255;
+  --shade: 31, 38, 135;
+
+  --ink-1: #091747;
+  --ink-2: #33456f;
+  --ink-3: #637293;
+
+  --acc-strong: #113a9a;
+  --acc-primary: #2468f4;
+  --acc-purple: #6738f3;
+  --acc-cyan: #007c97;
+  --acc-orange: #b95500;
+  --acc-danger: #d43340;
+  --acc-success: #048350;
+
+  --line: rgba(47, 115, 255, .1);
+  --line-strong: rgba(47, 115, 255, .18);
+
+  // Anything that must read *against* the card — never with it. In light mode
+  // these are darker than the glass; in dark mode they are lighter. Using
+  // --edge here was the bug: it is pure white in light mode.
+  --skeleton-base: rgba(31, 38, 135, .14);
+  --skeleton-peak: rgba(31, 38, 135, .26);
+  --track: rgba(31, 38, 135, .12);
+  --inset-surface: rgba(31, 38, 135, .07);
+  --inset-surface-strong: rgba(31, 38, 135, .09);
+
+  --canvas-solid: #eef5ff;
+  --canvas: linear-gradient(140deg, #fbfdff 0%, #f0f6ff 34%, #e3eeff 68%, #dbe9ff 100%);
+  --canvas-page: linear-gradient(138deg, #fbfdff 0%, #f3f8ff 32%, #eef5ff 62%, #e6efff 100%);
+
+  --glow-a: rgba(37, 196, 223, .22);
+  --glow-b: rgba(125, 85, 245, .2);
+  --glow-c: rgba(47, 115, 255, .14);
+
+  color-scheme: light;
+}
+
+// Navy rather than black: deep enough for contrast, soft enough to sit under
+// glass for long stretches without fatigue.
+:root[data-theme='dark'] {
+  --tint: 30, 42, 71;
+  --edge: 124, 148, 198;
+  --shade: 3, 7, 21;
+
+  --ink-1: #eaf0ff;
+  --ink-2: #bccbe9;
+  --ink-3: #93a3c6;
+
+  --acc-strong: #b6cfff;
+  --acc-primary: #7dabff;
+  --acc-purple: #b399ff;
+  --acc-cyan: #52d3ec;
+  --acc-orange: #ffb673;
+  --acc-danger: #ff9099;
+  --acc-success: #56cfa0;
+
+  --line: rgba(158, 182, 232, .14);
+  --line-strong: rgba(158, 182, 232, .24);
+
+  --skeleton-base: rgba(166, 189, 236, .15);
+  --skeleton-peak: rgba(166, 189, 236, .32);
+  --track: rgba(166, 189, 236, .2);
+  --inset-surface: rgba(166, 189, 236, .13);
+  --inset-surface-strong: rgba(166, 189, 236, .22);
+
+  --canvas-solid: #131b30;
+  --canvas: linear-gradient(140deg, #18223c 0%, #141d34 34%, #111a2e 68%, #0e1729 100%);
+  --canvas-page: linear-gradient(138deg, #18223c 0%, #151e37 32%, #121a2f 62%, #101828 100%);
+
+  --glow-a: rgba(37, 196, 223, .16);
+  --glow-b: rgba(125, 85, 245, .18);
+  --glow-c: rgba(47, 115, 255, .18);
+
+  color-scheme: dark;
+}

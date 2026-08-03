@@ -1,0 +1,158 @@
+@import '@/styles/mixins.less';
+
+.needs-card {
+  &__legend {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 14px;
+    font-size: @fs-xs;
+    font-weight: @fw-medium;
+    color: @text-secondary;
+  }
+
+  &__key {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    &::before {
+      content: '';
+      width: 16px;
+      height: 7px;
+      border-radius: @radius-pill;
+      background: linear-gradient(90deg, @secondary, @primary);
+    }
+
+    // The target is a marker, not a fill — the swatch has to say so.
+    &--imp::before {
+      width: 3px;
+      height: 14px;
+      border-radius: 2px;
+      background: @primary-dark;
+      box-shadow: 0 0 0 2px rgba(var(--tint), .9);
+    }
+  }
+
+  // Rows spread to fill the card instead of bunching at the top.
+  &__list {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 6px;
+    min-height: 0;
+  }
+
+  &__footer {
+    margin-top: auto;
+    padding-top: @space-4;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: @space-3;
+
+    .card-note { margin-top: 0; }
+  }
+
+  &__link {
+    width: auto;
+    margin-top: 0;
+    padding-top: 0;
+  }
+}
+
+.needs-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) minmax(90px, 1.1fr) 46px;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 0;
+
+  &__icon {
+    .icon-bubble(28px, @secondary);
+  }
+
+  &__copy {
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+  }
+
+  &__label {
+    .truncate();
+    font-size: @fs-sm;
+    font-weight: @fw-semibold;
+  }
+
+  &__scores {
+    .truncate();
+    font-size: @fs-xs;
+    color: @text-muted;
+
+    b {
+      font-weight: @fw-semibold;
+      color: @text-secondary;
+    }
+  }
+
+  &__gap {
+    font-style: normal;
+    font-size: @fs-md;
+    font-weight: @fw-bold;
+    text-align: right;
+    letter-spacing: -.02em;
+  }
+
+  &--behind .needs-row__gap { color: @ink-danger; }
+  &--ahead .needs-row__gap { color: @ink-success; }
+  &--even .needs-row__gap { color: @text-muted; }
+
+  &--ahead .needs-meter__fill { background: linear-gradient(90deg, @success, lighten(@success, 14%)); }
+  &--even .needs-meter__fill { background: linear-gradient(90deg, @cyan, lighten(@cyan, 12%)); }
+}
+
+// Single 1–5 track: fill = delivered, marker = expected.
+.needs-meter {
+  position: relative;
+  height: 10px;
+  border-radius: @radius-pill;
+  background: var(--track);
+  box-shadow: inset 0 1px 2px rgba(var(--shade), .08);
+
+  &__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, @secondary, @primary);
+    box-shadow: 0 1px 6px fade(@primary, 32%);
+    transition: width 420ms @ease-out;
+  }
+
+  &__target {
+    position: absolute;
+    top: -3px;
+    bottom: -3px;
+    width: 3px;
+    margin-left: -1px;
+    border-radius: 2px;
+    background: @primary-dark;
+    box-shadow: 0 0 0 2px rgba(var(--tint), .9);
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .needs-card__footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .needs-row {
+    grid-template-columns: auto minmax(0, 1fr) 46px;
+
+    .needs-meter {
+      grid-column: 2 / -1;
+      margin-top: 4px;
+    }
+  }
+}

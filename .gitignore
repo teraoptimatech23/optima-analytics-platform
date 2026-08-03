@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+.env.*
+!.env.example
+.DS_Store
+*.local
+
+# Raw synthetic export (53 MB): regenerate with `npm run data:generate`.
+# The 1.1 MB cube in src/data/insights.json is what the app consumes.
+data/*.csv

@@ -1,0 +1,367 @@
+@import '@/pages/MarketingAnalytics/GoogleAds/index.less';
+
+.attribution-page {
+  .google-kpi__icon,
+  .attribution-card__icon,
+  .attribution-channel-list article i,
+  .attribution-bars article i,
+  .attribution-position article span i {
+    background: linear-gradient(180deg, fade(@cyan, 86%), fade(@orange, 76%));
+  }
+}
+
+.attribution-hero {
+  .hero-copy p {
+    max-width: 920px;
+  }
+}
+
+.attribution-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: @space-4;
+}
+
+.attribution-card {
+  min-height: 152px;
+  gap: 8px;
+  overflow: hidden;
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: @white;
+    box-shadow: 0 14px 30px fade(@cyan, 30%);
+  }
+
+  &__label {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    text-transform: uppercase;
+  }
+
+  strong {
+    font-size: clamp(24px, 2vw, 34px);
+    line-height: 1;
+  }
+
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+}
+
+.attribution-panel {
+  gap: @space-4;
+  overflow: hidden;
+
+  &__head {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: @space-4;
+
+    span,
+    small {
+      color: @text-muted;
+      font-size: @fs-xs;
+      font-weight: @fw-semibold;
+    }
+
+    h2 {
+      margin: 4px 0 0;
+      font-size: @fs-xl;
+    }
+
+    button {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: @text-secondary;
+      border: 1px solid rgba(var(--edge), .48);
+      border-radius: @radius-md;
+      background: rgba(var(--tint), .5);
+      padding: 0 12px;
+      font-weight: @fw-semibold;
+      cursor: pointer;
+    }
+  }
+}
+
+.attribution-controls {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  gap: 10px;
+
+  label {
+    display: grid;
+    gap: 6px;
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+
+  select,
+  input {
+    min-height: 38px;
+    width: 100%;
+    color: @text-primary;
+    border-radius: @radius-md;
+    border: 1px solid rgba(var(--edge), .56);
+    background: rgba(var(--tint), .62);
+    padding: 0 11px;
+  }
+}
+
+.attribution-grid {
+  display: grid;
+  gap: @space-4;
+
+  &--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.attribution-channel-list,
+.attribution-paths,
+.attribution-bars,
+.attribution-position,
+.attribution-pairs,
+.attribution-insights,
+.attribution-method,
+.attribution-model-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.attribution-channel-list article,
+.attribution-paths article,
+.attribution-bars article,
+.attribution-position article,
+.attribution-pairs article,
+.attribution-insights article,
+.attribution-model-grid article {
+  padding: 12px;
+  border-radius: @radius-md;
+  border: 1px solid rgba(var(--edge), .36);
+  background: rgba(var(--tint), .34);
+
+  strong,
+  span,
+  small {
+    display: block;
+  }
+
+  span,
+  small,
+  dt {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.45;
+  }
+}
+
+.attribution-channel-list article {
+  display: grid;
+  gap: 10px;
+
+  > i {
+    height: 10px;
+    border-radius: 999px;
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+  }
+
+  dd {
+    margin: 0;
+    color: @text-primary;
+    font-weight: @fw-bold;
+  }
+}
+
+.attribution-model-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+
+  article {
+    display: grid;
+    gap: 10px;
+
+    &.is-active {
+      border-color: fade(@cyan, 72%);
+      box-shadow: inset 0 1px 0 rgba(var(--edge), .68), 0 18px 50px fade(@cyan, 14%);
+    }
+
+    strong {
+      font-size: @fs-xl;
+    }
+
+    dl {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+    }
+
+    div {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    dd {
+      margin: 0;
+      text-align: right;
+      color: @text-primary;
+      font-weight: @fw-semibold;
+    }
+  }
+}
+
+.attribution-paths article {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.attribution-bars article {
+  display: grid;
+  gap: 8px;
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  i {
+    height: 9px;
+    border-radius: 999px;
+  }
+}
+
+.attribution-position article {
+  display: grid;
+  gap: 8px;
+
+  span {
+    position: relative;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    padding-left: 8px;
+    overflow: hidden;
+    border-radius: @radius-sm;
+    background: rgba(var(--edge), .14);
+    color: @text-secondary;
+    font-weight: @fw-semibold;
+
+    i {
+      position: absolute;
+      inset: 0 auto 0 0;
+      opacity: .46;
+    }
+  }
+}
+
+.attribution-table-wrap {
+  overflow-x: auto;
+
+  table {
+    min-width: 980px;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(var(--edge), .22);
+    text-align: left;
+    font-size: @fs-sm;
+  }
+
+  th {
+    color: @text-muted;
+    font-size: @fs-xs;
+    text-transform: uppercase;
+  }
+
+  td span {
+    display: block;
+    color: @text-muted;
+    font-size: @fs-xs;
+    margin-top: 3px;
+  }
+}
+
+.attribution-insights article {
+  border-left: 3px solid fade(@cyan, 74%);
+
+  &.is-high {
+    border-left-color: fade(@danger, 78%);
+  }
+
+  &.is-medium {
+    border-left-color: fade(@orange, 78%);
+  }
+}
+
+.attribution-method {
+  p {
+    margin: 0;
+    color: @text-secondary;
+    font-size: @fs-sm;
+    line-height: 1.55;
+  }
+}
+
+@media (max-width: @breakpoint-laptop) {
+  .attribution-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .attribution-controls {
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+  }
+
+  .attribution-model-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: @breakpoint-tablet) {
+  .attribution-grid--two {
+    grid-template-columns: 1fr;
+  }
+
+  .attribution-controls {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .attribution-summary,
+  .attribution-controls,
+  .attribution-model-grid,
+  .attribution-channel-list article dl {
+    grid-template-columns: 1fr;
+  }
+
+  .attribution-paths article,
+  .attribution-panel__head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

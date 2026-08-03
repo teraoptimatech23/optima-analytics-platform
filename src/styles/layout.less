@@ -1,0 +1,90 @@
+// Patterns shared by more than one dashboard card. Keep this file small —
+// anything used by a single card belongs in that card's own stylesheet.
+
+.card-link {
+  .button-reset();
+  margin-top: auto;
+  padding-top: @space-4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  width: 100%;
+  color: @ink-primary;
+  font-size: @fs-sm;
+  font-weight: @fw-semibold;
+  transition: color @duration @ease-out, gap @duration @ease-out;
+
+  &:hover {
+    color: @primary-dark;
+    gap: 10px;
+  }
+}
+
+// Tiny solid triangle used next to every delta figure (no emoji, no glyph font).
+.trend-arrow {
+  width: 0;
+  height: 0;
+  flex: 0 0 auto;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 6px solid @success;
+
+  &--down {
+    border-bottom: 0;
+    border-top: 6px solid @danger;
+  }
+}
+
+.card-note {
+  margin-top: @space-3;
+  color: @text-muted;
+  font-size: @fs-xs;
+  font-weight: @fw-medium;
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .card-link {
+    min-height: 44px; // touch target
+    align-items: center;
+  }
+}
+
+// Visually hidden but announced by screen readers.
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+// First tab stop on the page: jumps past the sidebar and header.
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  z-index: 90;
+  padding: 12px 20px;
+  border-radius: @radius-pill;
+  color: @white;
+  font-size: @fs-sm;
+  font-weight: @fw-semibold;
+  background: @gradient-active;
+  border: 1px solid rgba(var(--edge), .5);
+  box-shadow: 0 14px 32px rgba(var(--shade), .3);
+  transform: translate(-50%, -180%);
+  transition: transform @duration @ease-out;
+
+  // :focus as well as :focus-visible — the link is keyboard-only anyway, and
+  // programmatic focus must reveal it too.
+  &:focus,
+  &:focus-visible {
+    transform: translate(-50%, 0);
+    outline: 0;
+  }
+}

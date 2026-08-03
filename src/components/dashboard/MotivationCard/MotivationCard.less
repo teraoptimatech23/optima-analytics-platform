@@ -1,0 +1,46 @@
+@import '@/styles/mixins.less';
+
+.motivation-card {
+  &__list {
+    .stack-rows();
+  }
+
+  &__note {
+    margin-top: auto;
+    padding-top: @space-4;
+  }
+}
+
+.motivation-row {
+  display: grid;
+  grid-template-columns: auto 84px minmax(0, 1fr) 26px;
+  align-items: center;
+  gap: 10px;
+
+  &__icon {
+    .icon-bubble(28px, @primary);
+  }
+
+  &__label {
+    .truncate();
+    font-size: @fs-xs;
+    font-weight: @fw-medium;
+  }
+
+  &__value {
+    font-style: normal;
+    font-size: @fs-xs;
+    font-weight: @fw-bold;
+    text-align: right;
+  }
+
+  &--purple .motivation-row__icon { .icon-bubble(28px, @secondary); }
+  &--cyan .motivation-row__icon { .icon-bubble(28px, @cyan); }
+  &--orange .motivation-row__icon { .icon-bubble(28px, @orange); }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .motivation-row {
+    grid-template-columns: auto 100px minmax(0, 1fr) 28px;
+  }
+}

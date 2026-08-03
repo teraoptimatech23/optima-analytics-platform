@@ -1,0 +1,161 @@
+@import '@/styles/mixins.less';
+
+.purchase-card {
+  // The split only fits while the card itself is wide, regardless of viewport.
+  container-type: inline-size;
+
+  &__body {
+    display: grid;
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1fr);
+    gap: @space-5;
+  }
+
+  &__block {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__subtitle {
+    margin-bottom: 12px;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    color: @text-primary;
+
+    span {
+      font-weight: @fw-regular;
+      color: @text-muted;
+    }
+
+    &--spaced { margin-top: 18px; }
+  }
+
+  &__donut {
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+  }
+
+  &__legend {
+    width: 100%;
+    display: grid;
+    gap: 7px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: grid;
+      grid-template-columns: 8px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      font-size: @fs-xs;
+      color: @text-secondary;
+    }
+
+    i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    span { .truncate(); }
+
+    strong {
+      font-size: @fs-xs;
+      font-weight: @fw-semibold;
+      color: @text-primary;
+    }
+  }
+
+  &__channels {
+    display: grid;
+    gap: 10px;
+  }
+}
+
+.channel-row {
+  display: grid;
+  grid-template-columns: auto 128px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 8px;
+  font-size: @fs-xs;
+
+  &__icon {
+    color: @ink-primary;
+
+    &--purple { color: @ink-purple; }
+    &--cyan { color: @ink-cyan; }
+    &--orange { color: @ink-orange; }
+    &--green { color: @ink-success; }
+  }
+
+  &__label {
+    .truncate();
+    font-weight: @fw-medium;
+    color: @text-secondary;
+  }
+
+  &__value {
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    text-align: right;
+  }
+}
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 10px;
+  color: @text-muted;
+  font-size: @fs-xs;
+  font-weight: @fw-medium;
+
+  i {
+    width: 16px;
+    height: 10px;
+    border-radius: 3px;
+  }
+}
+
+.heatmap {
+  display: grid;
+  grid-template-columns: 82px repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  align-items: center;
+
+  &__day,
+  &__hour {
+    font-size: @fs-xs;
+    font-weight: @fw-medium;
+    color: @text-muted;
+    text-align: center;
+  }
+
+  &__hour { text-align: right; padding-right: 4px; }
+
+  &__cell {
+    height: 16px;
+    border-radius: 5px;
+    background: var(--track);
+    transition: transform @duration @ease-out;
+
+    &:hover { transform: scale(1.12); }
+
+    &--1 { background: fade(@primary, 16%); }
+    &--2 { background: fade(@primary, 32%); }
+    &--3 { background: fade(@primary, 55%); }
+    &--4 { background: linear-gradient(135deg, @primary, @secondary); }
+  }
+}
+
+@container (max-width: 440px) {
+  .purchase-card__body { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .channel-row { grid-template-columns: auto 132px minmax(0, 1fr) 34px; }
+  .heatmap { grid-template-columns: 74px repeat(7, minmax(0, 1fr)); }
+}

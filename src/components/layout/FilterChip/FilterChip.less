@@ -1,0 +1,165 @@
+@import '@/styles/mixins.less';
+
+// One pill, one pane of glass — no nested surface inside it.
+.filter-chip {
+  .button-reset();
+  .hover-lift(-2px);
+  position: relative;
+  flex: 0 0 auto;
+  height: 42px;
+  padding: 0 13px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow: hidden;
+  color: @text-primary;
+  border-radius: @radius-pill;
+  background: linear-gradient(145deg, rgba(var(--tint), 0.86), rgba(var(--tint), 0.46));
+  border: 1px solid rgba(var(--edge), 0.82);
+  box-shadow:
+    0 8px 22px rgba(var(--shade), .12),
+    inset 0 1px 0 rgba(var(--edge), 0.96),
+    inset 0 -2px 6px fade(@primary, 8%);
+
+  // Specular cap across the upper half, like light sitting on a curved surface.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 52%;
+    pointer-events: none;
+    border-radius: inherit;
+    background: linear-gradient(180deg, rgba(var(--edge), 0.4), transparent);
+  }
+
+  &:hover {
+    border-color: rgba(var(--edge), 0.95);
+    background: linear-gradient(145deg, rgba(var(--tint), 0.95), rgba(var(--tint), 0.6));
+  }
+
+  &:focus-visible { .glass-focus(); }
+
+  // An applied filter should be obvious at a glance.
+  &--active {
+    border-color: fade(@primary, 55%);
+    box-shadow:
+      0 8px 22px fade(@primary, 22%),
+      inset 0 1px 0 rgba(var(--edge), 0.96);
+
+    .filter-chip__value { color: @ink-primary; }
+  }
+
+  &[data-state='open'] {
+    border-color: rgba(var(--edge), 0.98);
+    box-shadow: @glass-focus-shadow;
+
+    .filter-chip__caret { transform: rotate(180deg); }
+  }
+
+  &__caret { transition: transform @duration @ease-out; }
+
+  &__icon,
+  &__label,
+  &__value,
+  &__caret {
+    position: relative;
+    flex: 0 0 auto;
+  }
+
+  &__icon { color: @ink-primary; }
+
+  &__label {
+    font-size: @fs-xs;
+    font-weight: @fw-medium;
+    color: @text-muted;
+  }
+
+  &__value {
+    // Outlet and city names run long; the pill keeps its width predictable.
+    max-width: 128px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: @fs-sm;
+    font-weight: @fw-semibold;
+    white-space: nowrap;
+  }
+
+  &__caret { color: @text-muted; }
+}
+
+// Dropdown is portalled to the body, so it styles itself rather than inheriting.
+.filter-menu {
+  .glass(@radius-lg, rgba(var(--tint), 0.82), 26px, 0 18px 44px rgba(var(--shade), .2));
+  z-index: 60;
+  min-width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
+  padding: 6px;
+  overflow: hidden;
+
+  &__viewport {
+    max-height: min(340px, var(--radix-select-content-available-height));
+    overflow-y: auto;
+    .scroll-thin();
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: @space-3;
+    min-height: 38px;
+    padding: 0 10px;
+    border-radius: @radius-sm;
+    color: @text-secondary;
+    font-size: @fs-sm;
+    font-weight: @fw-medium;
+    cursor: pointer;
+    outline: 0;
+    transition: background @duration @ease-out, color @duration @ease-out;
+
+    &[data-highlighted] {
+      color: @primary-dark;
+      background: rgba(var(--tint), 0.82);
+    }
+
+    &[data-state='checked'] {
+      color: @ink-primary;
+      font-weight: @fw-semibold;
+    }
+  }
+
+  &__check {
+    display: inline-flex;
+    color: @ink-primary;
+  }
+}
+
+// The "Periode / Outlet / …" prefix only appears where it still fits on one row.
+@media (max-width: @filter-label-min) {
+  .filter-chip__label { display: none; }
+}
+
+// Tighter still below this: the leading icon goes so every value stays on one
+// row without scrolling.
+@media (max-width: @filter-compact-max) {
+  .filter-chip {
+    gap: 5px;
+    padding: 0 10px;
+
+    &__icon { display: none; }
+    &__value { font-size: @fs-xs; }
+  }
+
+  .filter-bar { gap: 8px; }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .filter-chip {
+    height: 44px; // touch target
+    padding: 0 12px;
+
+    &__value { font-size: @fs-xs; }
+  }
+
+  .filter-menu__item { min-height: 44px; }
+}

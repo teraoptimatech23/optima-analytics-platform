@@ -1,0 +1,343 @@
+@import '@/styles/mixins.less';
+
+// Floating liquid-glass panel: brighter and more separated from the canvas than
+// the cards, so the navigation reads as the topmost layer of the interface.
+.sidebar {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: @sidebar-width;
+  flex: 0 0 auto;
+  transition: width 260ms @ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: @space-4;
+  padding: 18px 14px;
+  overflow: hidden;
+  border-radius: @radius-container;
+  border: 1px solid rgba(var(--edge), 0.88);
+  background:
+    linear-gradient(
+      168deg,
+      rgba(var(--tint), 0.88) 0%,
+      rgba(var(--tint), 0.62) 32%,
+      fade(@primary-soft, 46%) 72%,
+      fade(@primary, 16%) 100%
+    );
+  box-shadow:
+    0 24px 60px rgba(var(--shade), .2),
+    0 4px 14px rgba(var(--shade), .08),
+    inset 0 1px 0 rgba(var(--edge), 0.98),
+    inset 0 -1px 0 rgba(var(--edge), 0.44),
+    inset 1px 0 0 rgba(var(--edge), 0.62);
+  backdrop-filter: blur(34px) saturate(180%);
+  -webkit-backdrop-filter: blur(34px) saturate(180%);
+
+  // Specular band along the top edge of the pane.
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 34%;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(var(--edge), 0.4), transparent);
+  }
+
+  // Slow highlight sweeping down the glass.
+  &::after {
+    content: '';
+    position: absolute;
+    left: -40%;
+    top: -30%;
+    width: 90%;
+    height: 60%;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(112deg, transparent 20%, rgba(var(--edge), 0.3) 50%, transparent 78%);
+    filter: blur(14px);
+    animation: sidebarSheen 9s @ease-out infinite;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__glow {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 52% 48% 38% 62% / 54% 40% 60% 46%;
+    filter: blur(30px);
+
+    &--top {
+      right: -34%;
+      top: 6%;
+      width: 82%;
+      height: 34%;
+      background: radial-gradient(circle at 44% 50%, fade(@cyan, 40%), transparent 66%);
+      opacity: .7;
+      animation: floatSoft 19s ease-in-out infinite;
+    }
+
+    &--bottom {
+      left: -46%;
+      bottom: -6%;
+      width: 128%;
+      height: 46%;
+      background:
+        radial-gradient(circle at 62% 46%, fade(@secondary, 34%), transparent 60%),
+        radial-gradient(circle at 30% 60%, fade(@primary, 40%), transparent 62%);
+      opacity: .8;
+      animation: floatSoft 24s ease-in-out infinite reverse;
+    }
+  }
+
+  &__brand {
+    display: grid;
+    padding: 2px 2px 0;
+  }
+
+  // Same glass as every other surface, so it belongs to the theme rather than
+  // sitting on it as a white card.
+  &__logo-plate {
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    padding: 10px;
+    border-radius: @radius-lg;
+    background: linear-gradient(150deg, rgba(var(--tint), .82), rgba(var(--tint), .5));
+    border: 1px solid rgba(var(--edge), .55);
+    box-shadow:
+      0 8px 24px rgba(var(--shade), .12),
+      inset 0 1px 0 rgba(var(--edge), .7);
+  }
+
+  // Both artworks are pre-trimmed (460×253), so they simply fill the plate
+  // width. Only one is ever displayed — see the theme swap below.
+  &__logo {
+    grid-area: 1 / 1;
+    width: 100%;
+    height: auto;
+    border-radius: @radius-sm;
+  }
+
+  // Dark-on-white artwork: multiply drops its white field onto the plate.
+  &__logo--light {
+    mix-blend-mode: multiply;
+  }
+
+  // Light-ink artwork on real transparency: nothing to blend away.
+  &__logo--dark {
+    display: none;
+  }
+
+  &__nav {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 2px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+
+    // Items dissolve at the edges instead of cutting off mid-row when scrolled.
+    mask-image: linear-gradient(180deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+
+    &::-webkit-scrollbar { width: 0; }
+  }
+
+  &__section {
+    min-width: 0;
+    display: grid;
+    gap: 3px;
+  }
+
+  &__section-toggle {
+    .button-reset();
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 0 11px;
+    color: @text-muted;
+    border-radius: @radius-md;
+    border: 1px solid transparent;
+    transition:
+      color @duration @ease-out,
+      background @duration @ease-out,
+      border-color @duration @ease-out,
+      transform @duration @ease-out;
+
+    &:hover {
+      color: @primary-dark;
+      background: linear-gradient(145deg, rgba(var(--tint), 0.66), rgba(var(--tint), 0.32));
+      border-color: rgba(var(--edge), 0.58);
+      transform: translateY(-1px);
+    }
+
+    &:focus-visible { .glass-focus(); }
+  }
+
+  &__section-icon {
+    flex: 0 0 auto;
+  }
+
+  &__section-label {
+    .truncate();
+    flex: 1 1 auto;
+    text-align: left;
+    font-size: 11px;
+    font-weight: @fw-semibold;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  &__section-chevron {
+    flex: 0 0 auto;
+    transition: transform @duration @ease-out;
+  }
+
+  &__section-toggle[aria-expanded='true'] &__section-chevron {
+    transform: rotate(180deg);
+  }
+
+  &__section--active &__section-toggle {
+    color: @primary-dark;
+    background: linear-gradient(145deg, rgba(var(--tint), 0.72), rgba(var(--tint), 0.38));
+    border-color: rgba(var(--edge), 0.62);
+  }
+
+  &__section-items {
+    min-width: 0;
+    overflow: hidden;
+    display: grid;
+    gap: 3px;
+    padding: 0 0 3px 13px;
+    border-left: 1px solid rgba(var(--edge), .34);
+    margin-left: 20px;
+  }
+
+  // The panel ends here: profile card is the last element in the sidebar.
+  &__user {
+    .hover-lift(-2px);
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    cursor: pointer;
+    border-radius: @radius-lg;
+    background: linear-gradient(145deg, rgba(var(--tint), 0.88), rgba(var(--tint), 0.52));
+    border: 1px solid rgba(var(--edge), 0.9);
+    box-shadow:
+      0 10px 26px rgba(var(--shade), .16),
+      inset 0 1px 0 rgba(var(--edge), 0.98);
+
+    > svg {
+      flex: 0 0 auto;
+      color: @text-muted;
+      transition: transform @duration @ease-out;
+    }
+
+    &:hover > svg { transform: translateY(2px); }
+  }
+
+  &__avatar {
+    position: relative;
+    flex: 0 0 auto;
+    display: block;
+  }
+
+  &__status {
+    position: absolute;
+    right: 0;
+    bottom: 1px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: linear-gradient(140deg, lighten(@success, 12%), @success);
+    border: 2px solid rgba(var(--edge), 0.92);
+    box-shadow: 0 2px 6px fade(@success, 45%);
+  }
+
+  &__user-copy {
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+    flex: 1 1 auto;
+
+    strong {
+      .truncate();
+      font-size: @fs-md;
+      font-weight: @fw-semibold;
+    }
+
+    span {
+      .truncate();
+      color: @text-muted;
+      font-size: @fs-xs;
+      font-weight: @fw-medium;
+    }
+  }
+
+  &--collapsed {
+    width: @sidebar-collapsed-width;
+    padding-inline: 10px;
+
+    // The stacked mark carries wordmark text — illegible at rail width, so the
+    // brand plate steps aside entirely when collapsed.
+    .sidebar__brand,
+    .sidebar__user-copy,
+    .sidebar__user > svg { display: none; }
+
+    .sidebar__user { justify-content: center; padding-inline: 0; }
+
+    .sidebar__section-toggle {
+      justify-content: center;
+      padding-inline: 0;
+    }
+
+    .sidebar__section-label,
+    .sidebar__section-chevron {
+      display: none;
+    }
+
+    .sidebar__section-items {
+      margin-left: 0;
+      padding-left: 0;
+      border-left: 0;
+    }
+  }
+}
+
+// Swap the artwork itself rather than filtering it: the dark variant ships with
+// light ink on a transparent field, so it needs no blend mode at all.
+:root[data-theme='dark'] {
+  .sidebar__logo--light { display: none; }
+  .sidebar__logo--dark { display: block; }
+}
+
+@keyframes sidebarSheen {
+  0%, 62% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+  70% { opacity: .9; }
+  100% { transform: translate3d(60%, 220%, 0) rotate(6deg); opacity: 0; }
+}
+
+// Short viewports: tighten the plate so the ten menu rows still fit.
+@media (max-height: 900px) {
+  .sidebar {
+    padding-block: 14px;
+
+    &__logo-plate { padding: 8px; }
+  }
+}
+
+@media (max-width: @breakpoint-tablet) {
+  .sidebar { display: none; }
+}

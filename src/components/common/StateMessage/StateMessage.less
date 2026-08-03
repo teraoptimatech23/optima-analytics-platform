@@ -1,0 +1,36 @@
+@import '@/styles/mixins.less';
+
+.state-message {
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 220px;
+  padding: @space-6 @space-5;
+  text-align: center;
+
+  &__icon {
+    .icon-bubble(52px, @primary);
+    margin-bottom: 4px;
+  }
+
+  &__title {
+    font-size: @fs-lg;
+    font-weight: @fw-bold;
+    letter-spacing: -.015em;
+  }
+
+  &__description {
+    max-width: 46ch;
+    font-size: @fs-sm;
+    line-height: 1.6;
+    color: @text-secondary;
+  }
+
+  &__action {
+    margin-top: 6px;
+  }
+
+  &--danger {
+    .state-message__icon { .icon-bubble(52px, @danger); }
+  }
+}

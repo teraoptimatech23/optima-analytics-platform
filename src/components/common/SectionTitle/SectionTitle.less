@@ -1,0 +1,52 @@
+@import '@/styles/mixins.less';
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: @space-3;
+  margin-bottom: @space-4;
+
+  &__main {
+    min-width: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: @text-primary;
+  }
+
+  &__icon {
+    .icon-bubble(30px, @primary);
+  }
+
+  strong {
+    font-size: @fs-md;
+    font-weight: @fw-bold;
+    letter-spacing: -.01em;
+  }
+
+  &__subtitle {
+    .truncate();
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-medium;
+  }
+
+  &__meta {
+    display: inline-flex;
+    align-items: center;
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-medium;
+    white-space: nowrap;
+  }
+
+  &--purple .section-title__icon { .icon-bubble(30px, @secondary); }
+  &--cyan .section-title__icon { .icon-bubble(30px, @cyan); }
+  &--orange .section-title__icon { .icon-bubble(30px, @orange); }
+  &--red .section-title__icon { .icon-bubble(30px, @danger); }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .section-title__subtitle { display: none; }
+}

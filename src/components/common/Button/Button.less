@@ -1,0 +1,38 @@
+@import '@/styles/mixins.less';
+
+.ui-button {
+  .button-reset();
+  .hover-lift(-2px);
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: @space-2;
+  padding: 0 18px;
+  border-radius: @radius-pill;
+  font-size: @fs-md;
+  font-weight: @fw-semibold;
+  white-space: nowrap;
+
+  &:focus-visible { .glass-focus(); }
+
+  &--glass {
+    .glass-control();
+    color: @primary-dark;
+  }
+
+  &--primary {
+    color: @white;
+    border: 1px solid rgba(var(--edge), 0.34);
+    background: @gradient-brand;
+    box-shadow: @shadow-active;
+
+    &:hover { box-shadow: 0 16px 32px fade(@primary, 38%); }
+  }
+
+  &--ghost {
+    color: @text-secondary;
+
+    &:hover { color: @primary; box-shadow: none; }
+  }
+}

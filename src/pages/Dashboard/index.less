@@ -1,0 +1,163 @@
+@import '@/styles/mixins.less';
+
+.dashboard-page {
+  display: grid;
+  gap: @grid-gap;
+  position: relative;
+  z-index: 1;
+
+  &__hero {
+    min-height: 128px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    align-items: center;
+    gap: @space-5;
+    padding: 4px 0 0;
+  }
+
+  &__kpis {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: @grid-gap;
+  }
+
+  // Capped at two columns on purpose: four across squeezes the labels.
+  &__insights {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: @grid-gap;
+    align-items: stretch;
+  }
+
+  // Two cards side by side, with the KPI table claiming its own full-width row.
+  &__analysis {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: @grid-gap;
+    align-items: stretch;
+  }
+
+  &__actions {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: @grid-gap;
+  }
+
+  &__source {
+    padding-top: @space-2;
+    text-align: center;
+    font-size: @fs-xs;
+    font-weight: @fw-medium;
+    color: @text-muted;
+  }
+}
+
+.hero-copy {
+  max-width: 760px;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: @fs-display;
+    line-height: 1.08;
+    font-weight: @fw-bold;
+    letter-spacing: -.03em;
+
+    svg {
+      flex: 0 0 auto;
+      color: @primary;
+      filter: drop-shadow(0 6px 14px fade(@primary, 34%));
+    }
+  }
+
+  p {
+    max-width: 620px;
+    font-size: @fs-md;
+    line-height: 1.65;
+    font-weight: @fw-regular;
+    color: @text-secondary;
+
+    strong { color: @primary-dark; font-weight: @fw-semibold; }
+  }
+}
+
+// Glass scenery standing in for the product imagery: orbs + a flowing wave.
+.hero-glass {
+  position: relative;
+  height: 128px;
+  pointer-events: none;
+
+  &__orb {
+    position: absolute;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 32% 24%, rgba(var(--tint), 0.95), fade(@primary-soft, 60%) 46%, fade(@primary, 12%));
+    border: 1px solid rgba(var(--edge), 0.7);
+    box-shadow: 0 12px 30px rgba(var(--shade), .14);
+
+    &--one {
+      width: 62px;
+      height: 62px;
+      left: 18%;
+      top: 14%;
+      animation: floatSoft 12s ease-in-out infinite;
+    }
+
+    &--two {
+      width: 30px;
+      height: 30px;
+      right: 20%;
+      bottom: 18%;
+      animation: floatSoft 16s ease-in-out infinite reverse;
+    }
+  }
+
+  &__wave {
+    position: absolute;
+    inset: 8% 0 8% 12%;
+    border-radius: 58% 42% 46% 54% / 52% 42% 58% 48%;
+    background:
+      linear-gradient(130deg, rgba(var(--tint), 0.55), fade(@cyan, 20%) 48%, fade(@secondary, 16%));
+    border: 1px solid rgba(var(--edge), 0.4);
+    filter: blur(6px);
+    opacity: .8;
+  }
+}
+
+.kpi-table-card {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: @breakpoint-laptop) {
+  .dashboard-page {
+    gap: 18px;
+
+    &__kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    &__actions { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+}
+
+@media (max-width: @breakpoint-tablet) {
+  .dashboard-page__hero {
+    grid-template-columns: minmax(0, 1fr);
+
+    .hero-glass { display: none; }
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .dashboard-page {
+    gap: 14px;
+
+    &__kpis,
+    &__insights,
+    &__analysis,
+    &__actions {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .kpi-table-card { grid-column: auto; }
+}

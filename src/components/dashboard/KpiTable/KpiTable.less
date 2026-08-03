@@ -1,0 +1,87 @@
+@import '@/styles/mixins.less';
+
+.kpi-table {
+  display: grid;
+  gap: 2px;
+
+  &__head,
+  &__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) .7fr 1fr .8fr .8fr 1fr;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__head {
+    padding-bottom: 8px;
+    border-bottom: 1px solid @line-strong;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    color: @text-muted;
+  }
+
+  &__row {
+    padding: 9px 0;
+    font-size: @fs-xs;
+    border-radius: @radius-sm;
+    transition: background @duration @ease-out;
+
+    & + .kpi-table__row { border-top: 1px solid @line; }
+
+    &:hover { background: var(--inset-surface); }
+  }
+
+  &__label {
+    .truncate();
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+
+  &__current { font-weight: @fw-semibold; }
+
+  &__target { color: @text-secondary; }
+
+  &__change {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: @fw-semibold;
+    color: @ink-success;
+
+    &--down { color: @ink-danger; }
+  }
+
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: @fw-semibold;
+    color: @ink-success;
+
+    svg { flex: 0 0 auto; }
+  }
+
+  &__trend {
+    display: block;
+    height: 22px;
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .kpi-table {
+    &__head { display: none; }
+
+    &__row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 4px 10px;
+      padding: 10px 0;
+    }
+
+    &__label { grid-column: 1; }
+    &__current { grid-column: 2; text-align: right; font-size: @fs-md; }
+    &__change { grid-column: 1; }
+    &__status { grid-column: 2; justify-content: flex-end; }
+    &__target,
+    &__trend { display: none; }
+  }
+}

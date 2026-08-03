@@ -1,0 +1,431 @@
+@import '@/styles/mixins.less';
+
+.customer-perception {
+  display: grid;
+  gap: @grid-gap;
+  position: relative;
+  z-index: 1;
+}
+
+.perception-hero {
+  min-height: 156px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @space-5;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  p {
+    max-width: 920px;
+  }
+}
+
+.perception-source-badge {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: @radius-md;
+  color: @text-secondary;
+  border: 1px solid rgba(var(--edge), .56);
+  background: linear-gradient(145deg, rgba(var(--tint), .74), rgba(var(--tint), .38));
+  box-shadow: inset 0 1px 0 rgba(var(--edge), .72);
+  font-size: @fs-xs;
+  font-weight: @fw-semibold;
+}
+
+.perception-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: @space-4;
+}
+
+.perception-kpi {
+  min-height: 150px;
+  gap: 8px;
+  overflow: hidden;
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: @white;
+    background: linear-gradient(180deg, fade(@primary, 88%), fade(@cyan, 72%));
+    box-shadow: 0 14px 30px fade(@primary, 30%);
+  }
+
+  > span:not(.perception-kpi__icon) {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    text-transform: uppercase;
+  }
+
+  strong {
+    font-size: clamp(24px, 2vw, 34px);
+    line-height: 1;
+  }
+
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+}
+
+.perception-panel {
+  gap: @space-4;
+  overflow: hidden;
+
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: @space-4;
+
+    span,
+    small {
+      color: @text-muted;
+      font-size: @fs-xs;
+      font-weight: @fw-semibold;
+    }
+
+    h2 {
+      margin: 4px 0 0;
+      font-size: @fs-xl;
+    }
+
+    button,
+    a {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: @text-secondary;
+      border: 1px solid rgba(var(--edge), .48);
+      border-radius: @radius-md;
+      background: rgba(var(--tint), .5);
+      padding: 0 12px;
+      font-weight: @fw-semibold;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  }
+}
+
+.perception-controls {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  gap: 10px;
+
+  label {
+    display: grid;
+    gap: 6px;
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+
+  select,
+  input {
+    min-height: 38px;
+    width: 100%;
+    color: @text-primary;
+    border-radius: @radius-md;
+    border: 1px solid rgba(var(--edge), .56);
+    background: rgba(var(--tint), .62);
+    padding: 0 11px;
+  }
+}
+
+.perception-grid {
+  display: grid;
+  gap: @space-4;
+
+  &--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.perception-dimensions,
+.perception-attributes,
+.perception-comparison,
+.perception-list,
+.perception-nps,
+.perception-personas {
+  display: grid;
+  gap: 12px;
+}
+
+.perception-dimensions button,
+.perception-attributes button,
+.perception-comparison article,
+.perception-list article,
+.perception-nps article,
+.perception-personas article {
+  padding: 12px;
+  border-radius: @radius-md;
+  border: 1px solid rgba(var(--edge), .36);
+  background: rgba(var(--tint), .34);
+  color: @text-primary;
+  text-align: left;
+
+  strong,
+  span,
+  small {
+    display: block;
+  }
+
+  span,
+  small,
+  dt {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.45;
+  }
+}
+
+.perception-dimensions button {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  overflow: hidden;
+  cursor: pointer;
+
+  > i {
+    grid-column: 1 / -1;
+    height: 9px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, fade(@cyan, 70%), fade(@orange, 74%));
+  }
+
+  dl {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+  }
+
+  dd {
+    margin: 0;
+    color: @text-primary;
+    font-weight: @fw-bold;
+  }
+}
+
+.perception-attributes {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  button {
+    cursor: pointer;
+  }
+}
+
+.perception-comparison article {
+  display: grid;
+  gap: 10px;
+
+  > i {
+    height: 9px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, fade(@primary, 68%), fade(@cyan, 70%));
+  }
+
+  dl {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+  }
+
+  dd {
+    margin: 0;
+    color: @text-primary;
+    font-size: @fs-xs;
+    font-weight: @fw-bold;
+  }
+}
+
+.perception-list article {
+  display: grid;
+  gap: 6px;
+
+  a {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: @cyan;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    text-decoration: none;
+  }
+}
+
+.perception-nps,
+.perception-personas {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.perception-explorer {
+  p {
+    margin: 0;
+    color: @text-secondary;
+    font-size: @fs-sm;
+    line-height: 1.55;
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+
+    article {
+      padding: 12px;
+      border-radius: @radius-md;
+      border: 1px solid rgba(var(--edge), .32);
+      background: rgba(var(--tint), .28);
+
+      strong,
+      span {
+        display: block;
+      }
+
+      span {
+        color: @text-muted;
+        font-size: @fs-xs;
+      }
+    }
+  }
+}
+
+.perception-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 10, 24, .62);
+    backdrop-filter: blur(6px);
+  }
+
+  aside {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: min(560px, 100%);
+    display: grid;
+    align-content: start;
+    gap: @space-4;
+    overflow-y: auto;
+    padding: @space-6;
+    border-left: 1px solid rgba(var(--edge), .5);
+    background: linear-gradient(180deg, rgba(19, 35, 71, .98), rgba(13, 27, 56, .98));
+    box-shadow: -30px 0 80px rgba(0, 0, 0, .32);
+
+    > button {
+      justify-self: end;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: @text-primary;
+      border: 1px solid rgba(var(--edge), .48);
+      background: rgba(var(--tint), .32);
+      cursor: pointer;
+    }
+  }
+
+  dl {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+  }
+
+  dt {
+    color: @text-muted;
+    font-size: @fs-xs;
+  }
+
+  dd {
+    margin: 0;
+    color: @text-primary;
+  }
+
+  p {
+    margin: 0;
+    color: @text-secondary;
+    line-height: 1.55;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    a {
+      padding: 8px 10px;
+      border-radius: @radius-sm;
+      color: @text-secondary;
+      border: 1px solid rgba(var(--edge), .36);
+      text-decoration: none;
+      font-size: @fs-xs;
+      font-weight: @fw-semibold;
+    }
+  }
+}
+
+.perception-footer {
+  color: @text-muted;
+  font-size: @fs-xs;
+}
+
+@media (max-width: @breakpoint-laptop) {
+  .perception-summary,
+  .perception-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .perception-comparison article dl,
+  .perception-nps,
+  .perception-personas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: @breakpoint-tablet) {
+  .perception-grid--two,
+  .perception-attributes {
+    grid-template-columns: 1fr;
+  }
+
+  .perception-hero,
+  .perception-panel__head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .perception-summary,
+  .perception-controls,
+  .perception-dimensions button dl,
+  .perception-comparison article dl,
+  .perception-explorer__body,
+  .perception-nps,
+  .perception-personas {
+    grid-template-columns: 1fr;
+  }
+}

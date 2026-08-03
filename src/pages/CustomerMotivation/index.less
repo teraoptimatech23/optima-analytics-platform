@@ -1,0 +1,342 @@
+@import '@/styles/mixins.less';
+
+.customer-motivation {
+  display: grid;
+  gap: @grid-gap;
+  position: relative;
+  z-index: 1;
+
+  &__hero {
+    min-height: 156px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: @space-5;
+  }
+
+  &__badge {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: @radius-md;
+    color: @text-secondary;
+    border: 1px solid rgba(var(--edge), .56);
+    background: linear-gradient(145deg, rgba(var(--tint), .74), rgba(var(--tint), .38));
+    box-shadow: inset 0 1px 0 rgba(var(--edge), .72);
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+
+  &__filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+    border-radius: @radius-lg;
+    border: 1px solid rgba(var(--edge), .38);
+    background: rgba(var(--tint), .28);
+
+    select,
+    button {
+      min-height: 38px;
+      color: @text-primary;
+      border-radius: @radius-md;
+      border: 1px solid rgba(var(--edge), .56);
+      background: rgba(var(--tint), .62);
+      padding: 0 11px;
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: @fw-semibold;
+    }
+  }
+
+  &__filters-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: @text-secondary;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    text-transform: uppercase;
+  }
+
+  &__source {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.5;
+  }
+}
+
+.motivation-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: @space-4;
+}
+
+.motivation-kpi {
+  min-height: 154px;
+  gap: 8px;
+  overflow: hidden;
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: @white;
+    background: linear-gradient(180deg, fade(@primary, 88%), fade(@cyan, 74%));
+    box-shadow: 0 14px 30px fade(@primary, 28%);
+  }
+
+  &--purple &__icon { background: linear-gradient(180deg, fade(@secondary, 88%), fade(@primary, 70%)); }
+  &--cyan &__icon { background: linear-gradient(180deg, fade(@cyan, 88%), fade(@success, 62%)); }
+  &--orange &__icon { background: linear-gradient(180deg, fade(@orange, 88%), fade(@danger, 55%)); }
+
+  &__label {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    text-transform: uppercase;
+  }
+
+  strong {
+    font-size: clamp(22px, 1.75vw, 31px);
+    line-height: 1.05;
+  }
+
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.45;
+  }
+}
+
+.motivation-grid {
+  display: grid;
+  gap: @space-4;
+
+  &--two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.motivation-panel {
+  gap: @space-4;
+  overflow: hidden;
+
+  &__head {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: @space-4;
+
+    span,
+    small {
+      color: @text-muted;
+      font-size: @fs-xs;
+      line-height: 1.45;
+    }
+
+    span {
+      display: block;
+      font-weight: @fw-semibold;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 4px 0 0;
+      font-size: @fs-xl;
+    }
+  }
+}
+
+.motivation-overview__rows {
+  display: grid;
+  gap: 12px;
+
+  article {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 12px;
+    padding: 12px;
+    border-radius: @radius-md;
+    border: 1px solid rgba(var(--edge), .36);
+    background: rgba(var(--tint), .34);
+  }
+
+  b {
+    display: inline-grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: fade(@primary, 18%);
+    color: @cyan;
+  }
+
+  span,
+  small {
+    display: block;
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.45;
+  }
+
+  em {
+    color: @text-secondary;
+    font-style: normal;
+    font-weight: @fw-semibold;
+  }
+
+  i {
+    grid-column: 1 / -1;
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, fade(@primary, 82%), fade(@cyan, 82%));
+  }
+}
+
+.motivation-table-card {
+  overflow-x: auto;
+}
+
+.motivation-table-wrap {
+  .scroll-thin();
+  overflow-x: auto;
+}
+
+.motivation-table {
+  width: 100%;
+  min-width: 1080px;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(var(--edge), .28);
+    white-space: nowrap;
+  }
+
+  th {
+    color: @text-muted;
+    font-size: 11px;
+    font-weight: @fw-semibold;
+    text-transform: uppercase;
+  }
+
+  td {
+    color: @text-secondary;
+    font-size: @fs-sm;
+
+    span {
+      display: block;
+      margin-top: 3px;
+      color: @text-muted;
+      font-size: @fs-xs;
+    }
+  }
+}
+
+.motivation-heatmap {
+  .scroll-thin();
+  overflow-x: auto;
+  display: grid;
+  grid-template-columns: 160px repeat(8, minmax(100px, 1fr));
+  gap: 6px;
+
+  > b,
+  strong,
+  span {
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: @radius-sm;
+    font-size: @fs-xs;
+  }
+
+  > b {
+    color: @text-muted;
+    background: rgba(var(--edge), .12);
+  }
+
+  &__row {
+    display: contents;
+
+    strong {
+      color: @text-secondary;
+      background: rgba(var(--tint), .34);
+    }
+
+    span {
+      justify-content: center;
+      color: @white;
+      background: linear-gradient(145deg, fade(@primary, 76%), fade(@cyan, 70%));
+      font-weight: @fw-semibold;
+    }
+  }
+}
+
+.motivation-notes ol {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 20px;
+  color: @text-secondary;
+  line-height: 1.55;
+
+  li {
+    padding-left: 4px;
+  }
+
+  strong,
+  span,
+  small {
+    display: block;
+  }
+
+  span,
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+  }
+}
+
+@media (max-width: @breakpoint-laptop) {
+  .motivation-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .motivation-grid--two { grid-template-columns: 1fr; }
+}
+
+@media (max-width: @breakpoint-tablet) {
+  .customer-motivation {
+    &__hero {
+      display: grid;
+      min-height: auto;
+    }
+
+    &__filters {
+      align-items: stretch;
+
+      select,
+      button {
+        width: 100%;
+      }
+    }
+  }
+
+  .motivation-panel__head {
+    display: grid;
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .motivation-summary { grid-template-columns: 1fr; }
+}

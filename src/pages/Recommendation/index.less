@@ -1,0 +1,432 @@
+@import '@/styles/mixins.less';
+
+.recommendation-page {
+  display: grid;
+  gap: @grid-gap;
+  position: relative;
+  z-index: 1;
+}
+
+.recommendation-hero {
+  min-height: 156px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: @space-5;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  p {
+    max-width: 940px;
+  }
+}
+
+.recommendation-source-badge {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-radius: @radius-md;
+  color: @text-secondary;
+  border: 1px solid rgba(var(--edge), .56);
+  background: linear-gradient(145deg, rgba(var(--tint), .74), rgba(var(--tint), .38));
+  box-shadow: inset 0 1px 0 rgba(var(--edge), .72);
+  font-size: @fs-xs;
+  font-weight: @fw-semibold;
+}
+
+.recommendation-summary,
+.recommendation-executive,
+.recommendation-grid,
+.recommendation-controls,
+.recommendation-list {
+  display: grid;
+  gap: @space-4;
+}
+
+.recommendation-summary {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.recommendation-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.recommendation-kpi {
+  min-height: 144px;
+  gap: 8px;
+  overflow: hidden;
+
+  &__icon {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: @white;
+    background: linear-gradient(180deg, fade(@orange, 86%), fade(@cyan, 72%));
+    box-shadow: 0 14px 30px fade(@orange, 30%);
+  }
+
+  > span:not(.recommendation-kpi__icon) {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    text-transform: uppercase;
+  }
+
+  strong {
+    font-size: clamp(22px, 2vw, 32px);
+    line-height: 1;
+  }
+
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+}
+
+.recommendation-panel {
+  gap: @space-4;
+  overflow: hidden;
+
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: @space-4;
+
+    span,
+    small {
+      color: @text-muted;
+      font-size: @fs-xs;
+      font-weight: @fw-semibold;
+    }
+
+    h2 {
+      margin: 4px 0 0;
+      font-size: @fs-xl;
+    }
+
+    button {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: @text-secondary;
+      border: 1px solid rgba(var(--edge), .48);
+      border-radius: @radius-md;
+      background: rgba(var(--tint), .5);
+      padding: 0 12px;
+      font-weight: @fw-semibold;
+      cursor: pointer;
+    }
+  }
+}
+
+.recommendation-controls {
+  grid-template-columns: repeat(6, minmax(132px, 1fr));
+  gap: 10px;
+
+  label {
+    display: grid;
+    gap: 6px;
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+
+  select {
+    min-height: 38px;
+    width: 100%;
+    color: @text-primary;
+    border-radius: @radius-md;
+    border: 1px solid rgba(var(--edge), .56);
+    background: rgba(var(--tint), .62);
+    padding: 0 11px;
+  }
+}
+
+.recommendation-executive {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.recommendation-exec {
+  gap: 12px;
+  min-height: 260px;
+  overflow: hidden;
+
+  span {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    text-transform: uppercase;
+  }
+
+  strong {
+    display: block;
+    margin-top: 6px;
+    font-size: @fs-lg;
+  }
+
+  p {
+    margin: 8px 0 0;
+    color: @text-secondary;
+    font-size: @fs-sm;
+    line-height: 1.45;
+  }
+
+  dl {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+  }
+
+  dt {
+    color: @text-muted;
+    font-size: @fs-xs;
+  }
+
+  dd {
+    margin: 0;
+    color: @text-primary;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+
+  button {
+    min-height: 38px;
+    color: @text-primary;
+    border: 1px solid rgba(var(--edge), .44);
+    border-radius: @radius-md;
+    background: rgba(var(--tint), .36);
+    cursor: pointer;
+  }
+}
+
+.recommendation-exec--critical { border-color: fade(@danger, 62%); }
+.recommendation-exec--high { border-color: fade(@orange, 58%); }
+
+.recommendation-matrix {
+  position: relative;
+  min-height: 460px;
+  border-radius: @radius-md;
+  border: 1px solid rgba(var(--edge), .32);
+  background:
+    linear-gradient(90deg, transparent 49.5%, rgba(var(--edge), .24) 50%, transparent 50.5%),
+    linear-gradient(0deg, transparent 49.5%, rgba(var(--edge), .24) 50%, transparent 50.5%),
+    rgba(var(--tint), .22);
+  overflow: hidden;
+
+  button {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    transform: translate(-50%, 50%);
+    border-radius: 50%;
+    color: @white;
+    border: 1px solid rgba(255, 255, 255, .32);
+    background: fade(@primary, 72%);
+    font-size: @fs-xs;
+    font-weight: @fw-bold;
+    cursor: pointer;
+  }
+
+  .priority-critical { background: fade(@danger, 84%); }
+  .priority-high { background: fade(@orange, 82%); }
+  .priority-medium { background: fade(@cyan, 74%); }
+}
+
+.matrix-label {
+  position: absolute;
+  color: @text-muted;
+  font-size: @fs-xs;
+  font-weight: @fw-bold;
+  text-transform: uppercase;
+
+  &--quick { left: 16px; top: 16px; }
+  &--strategic { right: 16px; top: 16px; }
+  &--fill { left: 16px; bottom: 16px; }
+  &--deprioritize { right: 16px; bottom: 16px; }
+}
+
+.recommendation-list article {
+  padding: 12px;
+  border-radius: @radius-md;
+  border: 1px solid rgba(var(--edge), .36);
+  background: rgba(var(--tint), .34);
+
+  strong,
+  span,
+  small {
+    display: block;
+  }
+
+  span,
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.45;
+  }
+}
+
+.recommendation-table-wrap {
+  overflow-x: auto;
+
+  table {
+    min-width: 1120px;
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(var(--edge), .22);
+    text-align: left;
+    font-size: @fs-sm;
+  }
+
+  th {
+    color: @text-muted;
+    font-size: @fs-xs;
+    text-transform: uppercase;
+  }
+
+  tbody tr {
+    cursor: pointer;
+  }
+
+  td span {
+    display: block;
+    color: @text-muted;
+    font-size: @fs-xs;
+    margin-top: 3px;
+  }
+}
+
+.recommendation-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 10, 24, .62);
+    backdrop-filter: blur(6px);
+  }
+
+  aside {
+    position: absolute;
+    inset: 0 0 0 auto;
+    width: min(620px, 100%);
+    display: grid;
+    align-content: start;
+    gap: @space-4;
+    overflow-y: auto;
+    padding: @space-6;
+    border-left: 1px solid rgba(var(--edge), .5);
+    background: linear-gradient(180deg, rgba(19, 35, 71, .98), rgba(13, 27, 56, .98));
+    box-shadow: -30px 0 80px rgba(0, 0, 0, .32);
+
+    > button {
+      justify-self: end;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: @text-primary;
+      border: 1px solid rgba(var(--edge), .48);
+      background: rgba(var(--tint), .32);
+      cursor: pointer;
+    }
+  }
+
+  h2,
+  h3,
+  p {
+    margin: 0;
+  }
+
+  span,
+  dt {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+
+  p,
+  dd {
+    color: @text-secondary;
+    line-height: 1.55;
+  }
+
+  dl {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  section {
+    display: grid;
+    gap: 8px;
+  }
+
+  nav a {
+    width: fit-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: @cyan;
+    text-decoration: none;
+    font-weight: @fw-semibold;
+  }
+}
+
+.recommendation-footer {
+  color: @text-muted;
+  font-size: @fs-xs;
+}
+
+@media (max-width: @breakpoint-laptop) {
+  .recommendation-summary,
+  .recommendation-controls {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .recommendation-executive {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: @breakpoint-tablet) {
+  .recommendation-grid--two,
+  .recommendation-executive {
+    grid-template-columns: 1fr;
+  }
+
+  .recommendation-hero,
+  .recommendation-panel__head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .recommendation-summary,
+  .recommendation-controls {
+    grid-template-columns: 1fr;
+  }
+}
