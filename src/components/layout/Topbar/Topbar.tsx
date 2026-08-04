@@ -1,17 +1,16 @@
 import {
   AlignVerticalSpaceAround,
   AlignVerticalSpaceBetween,
-  Bell,
   Menu,
   Moon,
   PanelLeft,
   PanelLeftClose,
   RefreshCcw,
-  Share2,
   Sun,
 } from 'lucide-react'
-import Button from '@/components/common/Button/Button'
 import FilterBar from '@/components/layout/FilterBar/FilterBar'
+import { loadCube } from '@/data/cube'
+import { buildSnapshot } from '@/data/query'
 import { useDensity } from '@/hooks/useDensity'
 import { useTheme } from '@/hooks/useTheme'
 import { useAppStore } from '@/store/useAppStore'
@@ -29,6 +28,25 @@ export default function Topbar() {
   const { density, toggleDensity } = useDensity()
   const loading = useDashboardStore((state) => state.loading)
   const cube = useDashboardStore((state) => state.cube)
+  const setCube = useDashboardStore((state) => state.setCube)
+  const setData = useDashboardStore((state) => state.setData)
+  const setLoading = useDashboardStore((state) => state.setLoading)
+  const setError = useDashboardStore((state) => state.setError)
+
+  const handleRefreshData = async () => {
+    setLoading(true)
+    try {
+      const loaded = await loadCube()
+      setCube(loaded)
+      setData(buildSnapshot(loaded, filterValues))
+      setError(null)
+    } catch (cause: unknown) {
+      setError(cause instanceof Error ? cause.message : 'Gagal memuat ulang data insight.')
+    } finally {
+      window.setTimeout(() => setLoading(false), 420)
+    }
+  }
+
   return (
     <header className="topbar">
       <div className="topbar__bar">
@@ -79,24 +97,16 @@ export default function Topbar() {
           </button>
 
           <button
-            className="topbar__icon-button"
+            className={`topbar__icon-button topbar__sync${loading ? ' topbar__sync--loading' : ''}`}
             type="button"
-            aria-label="Muat ulang data"
+            onClick={handleRefreshData}
+            aria-label="Sync refresh data"
             aria-busy={loading}
             disabled={loading}
+            title="Sync refresh data"
           >
             <RefreshCcw size={17} strokeWidth={1.9} />
           </button>
-
-          <button className="topbar__icon-button topbar__icon-button--alert" type="button" aria-label="Notifikasi, 3 belum dibaca">
-            <Bell size={17} strokeWidth={1.9} />
-            <span className="topbar__badge">3</span>
-          </button>
-
-          <Button className="topbar__share" variant="glass" aria-label="Bagikan laporan">
-            <Share2 size={16} strokeWidth={1.9} />
-            <span className="topbar__share-label">Bagikan Laporan</span>
-          </Button>
 
         </div>
       </div>

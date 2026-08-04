@@ -103,23 +103,6 @@
     &:focus-visible { .glass-focus(); }
   }
 
-  &__badge {
-    position: absolute;
-    right: -3px;
-    top: -3px;
-    min-width: 19px;
-    height: 19px;
-    display: grid;
-    place-items: center;
-    padding: 0 5px;
-    border-radius: @radius-pill;
-    color: @white;
-    background: linear-gradient(135deg, @danger, lighten(@danger, 8%));
-    border: 2px solid rgba(var(--edge), 0.78);
-    font-size: @fs-xs;
-    font-weight: @fw-bold;
-    box-shadow: 0 4px 12px fade(@danger, 34%);
-  }
 
   // Sidebar toggle lives at the far left of the header, ahead of the filters.
   &__collapse {
@@ -128,6 +111,14 @@
   }
 
   &__mobile-menu { display: none; }
+
+  &__sync--loading svg {
+    animation: topbarSyncSpin .85s linear infinite;
+  }
+}
+
+@keyframes topbarSyncSpin {
+  to { transform: rotate(360deg); }
 }
 
 // Both dropped early so the filter pills keep the whole left side.
@@ -135,12 +126,6 @@
   .topbar {
     &__updated { display: none; }
 
-    &__share {
-      width: 42px;
-      padding: 0;
-    }
-
-    &__share-label { display: none; }
   }
 }
 
@@ -155,7 +140,6 @@
     &__bar { gap: @space-2; padding-inline: 10px; }
     &__mobile-menu { display: grid; }
     &__collapse { display: none; }
-    &__share { display: none; }
   }
 }
 
