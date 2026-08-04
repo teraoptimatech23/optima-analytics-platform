@@ -129,36 +129,48 @@ function evidenceCards(data: NonNullable<ReturnType<typeof useDashboardStore.get
       value: formatCompactNumber(data.scope.transactions),
       detail: `${formatCompactNumber(data.scope.customers)} customers - ${data.scope.outlets} outlets`,
       route: '/',
+      icon: Database,
+      tone: 'data',
     },
     {
       label: 'Revenue Signal',
       value: revenueKpi?.value ?? '-',
       detail: revenueKpi ? `${revenueKpi.change} vs benchmark` : data.scope.periodLabel,
       route: '/',
+      icon: TrendingUp,
+      tone: 'revenue',
     },
     {
       label: 'Top Customer Need',
       value: topNeed?.label ?? '-',
       detail: topNeed ? `Importance ${topNeed.importance.toFixed(2)} - performance ${topNeed.performance.toFixed(2)}` : 'No active need signal',
       route: '/customer-insights/kebutuhan-pelanggan',
+      icon: Users,
+      tone: 'need',
     },
     {
       label: 'Priority Friction',
       value: topPain?.title ?? '-',
       detail: topPain ? `${topPain.severity} - ${topPain.impact}` : 'No active pain point',
       route: '/customer-insights/pain-points',
+      icon: Gauge,
+      tone: 'friction',
     },
     {
       label: 'Next Decision',
       value: topRecommendation?.title ?? '-',
       detail: topRecommendation ? `${topRecommendation.priority} priority - ${topRecommendation.owner}` : 'No recommendation',
       route: '/recommendation',
+      icon: Target,
+      tone: 'decision',
     },
     {
       label: 'Forecast Layer',
       value: 'Predictive',
       detail: 'Churn, CLV, demand, and sales forecast close the learning loop.',
       route: '/predictive-analytics/sales-forecast',
+      icon: BrainCircuit,
+      tone: 'forecast',
     },
   ]
 }
@@ -195,15 +207,23 @@ export default function GrowthLoop() {
       </section>
 
       <section className="growth-loop-page__evidence" aria-label="Growth loop evidence summary">
-        {evidenceCards(data).map((card) => (
-          <Link to={card.route} key={card.label}>
-            <GlassCard interactive={false} className="growth-evidence-card">
-              <span>{card.label}</span>
-              <strong>{card.value}</strong>
-              <small>{card.detail}</small>
-            </GlassCard>
-          </Link>
-        ))}
+        {evidenceCards(data).map((card) => {
+          const Icon = card.icon
+          return (
+            <Link className="growth-evidence-link" to={card.route} key={card.label} aria-label={`${card.label}: ${card.value}`}>
+              <GlassCard interactive={false} className={`growth-evidence-card growth-evidence-card--${card.tone}`}>
+                <span className="growth-evidence-card__aura" aria-hidden="true" />
+                <span className="growth-evidence-card__beam" aria-hidden="true" />
+                <div className="growth-evidence-card__top">
+                  <span className="growth-evidence-card__label">{card.label}</span>
+                  <span className="growth-evidence-card__icon" aria-hidden="true"><Icon size={18} strokeWidth={1.9} /></span>
+                </div>
+                <strong>{card.value}</strong>
+                <small>{card.detail}</small>
+              </GlassCard>
+            </Link>
+          )
+        })}
       </section>
 
       <GlassCard interactive={false} className="growth-loop-map">

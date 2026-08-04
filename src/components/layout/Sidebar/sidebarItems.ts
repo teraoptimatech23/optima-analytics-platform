@@ -42,7 +42,7 @@ export interface SidebarSection {
 export type SidebarMenuNode = SidebarLeafItem | SidebarSection
 
 export const sidebarItems: SidebarMenuNode[] = [
-  { id: 'summary', label: 'Ringkasan', icon: Home, path: '/' },
+  { id: 'summary', label: 'Overview', icon: Home, path: '/' },
   {
     id: 'growth-loop',
     label: 'Growth Loop',
@@ -55,19 +55,19 @@ export const sidebarItems: SidebarMenuNode[] = [
     label: 'Customer Insights',
     icon: CircleUserRound,
     children: [
-      { id: 'customer-profile', label: 'Profil Pelanggan', icon: CircleUserRound, path: '/customer-insights/profil-pelanggan' },
-      { id: 'customer-needs', label: 'Kebutuhan Pelanggan', icon: Target, path: '/customer-insights/kebutuhan-pelanggan' },
+      { id: 'customer-profile', label: 'Customer Profile', icon: CircleUserRound, path: '/customer-insights/profil-pelanggan' },
+      { id: 'customer-needs', label: 'Customer Needs', icon: Target, path: '/customer-insights/kebutuhan-pelanggan' },
       { id: 'pain-points', label: 'Pain Points', icon: Lightbulb, path: '/customer-insights/pain-points' },
       {
         id: 'motivation-drivers',
-        label: 'Motivasi Pelanggan',
+        label: 'Customer Motivation',
         icon: Gauge,
         path: '/customer-insights/motivasi-pelanggan',
         description: 'Halaman ini akan merangkum faktor pendorong kunjungan, pembelian ulang, dan loyalitas pelanggan.',
       },
       {
         id: 'customer-perception',
-        label: 'Persepsi Pelanggan',
+        label: 'Customer Perception',
         icon: UsersRound,
         path: '/customer-insights/persepsi-pelanggan',
         description: 'Halaman ini akan menampilkan persepsi pelanggan terhadap brand, layanan, harga, dan pengalaman outlet.',
@@ -79,7 +79,7 @@ export const sidebarItems: SidebarMenuNode[] = [
     label: 'Purchase Analytics',
     icon: ShoppingBag,
     children: [
-      { id: 'purchase-behaviour', label: 'Perilaku Pembelian', icon: ShoppingBag, path: '/purchase-analytics/perilaku-pembelian' },
+      { id: 'purchase-behaviour', label: 'Purchase Behaviour', icon: ShoppingBag, path: '/purchase-analytics/perilaku-pembelian' },
       {
         id: 'rfm-analysis',
         label: 'RFM Analysis',
@@ -203,7 +203,7 @@ export const sidebarItems: SidebarMenuNode[] = [
   },
   {
     id: 'recommendations',
-    label: 'Recommendation',
+    label: 'Recommendations',
     icon: ClipboardList,
     path: '/recommendation',
     description: 'Halaman ini akan mengubah insight menjadi rekomendasi prioritas untuk strategi customer, purchase, dan marketing.',
