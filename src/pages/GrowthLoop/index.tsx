@@ -121,6 +121,37 @@ const engines = [
   },
 ]
 
+const engagementRepLayers = [
+  {
+    id: 'engagement',
+    label: 'Engagement Engine',
+    icon: Activity,
+    route: '/customer-insights/motivasi-pelanggan',
+    role: 'Build relevance and repeat interaction by reading what customers need, feel, and do after acquisition.',
+    focus: 'From customer understanding to retained behaviour',
+    evidence: [
+      { label: 'Motivation', route: '/customer-insights/motivasi-pelanggan', detail: 'Behavioural proxy and survey-aligned motivation signals.' },
+      { label: 'Perception', route: '/customer-insights/persepsi-pelanggan', detail: 'Structured perception score and labelled sentiment bands.' },
+      { label: 'Journey', route: '/purchase-analytics/customer-journey', detail: 'Stage movement from acquisition to repeat, dormant, and churn risk.' },
+      { label: 'Recommendation', route: '/recommendation', detail: 'Targeted action queue with evidence and owner.' },
+    ],
+  },
+  {
+    id: 'rep',
+    label: 'REP Engine',
+    icon: TrendingUp,
+    route: '/purchase-analytics/rfm-analysis',
+    role: 'Translate retention, expansion, and profitability into measurable customer value loops.',
+    focus: 'Repeat order, retention, expansion, and predicted value',
+    evidence: [
+      { label: 'RFM', route: '/purchase-analytics/rfm-analysis', detail: 'Snapshot segmentation from recency, unique transactions, and monetary value.' },
+      { label: 'Cohort', route: '/purchase-analytics/cohort-analysis', detail: 'Weighted retention by first-purchase cohort age and maturity.' },
+      { label: 'Churn', route: '/predictive-analytics/churn-prediction', detail: 'Risk score with temporal split, baseline, calibration, and threshold guardrails.' },
+      { label: 'CLV', route: '/predictive-analytics/customer-lifetime-value-prediction', detail: 'Historical and predicted value separated by explicit horizon.' },
+    ],
+  },
+]
+
 const actionTrackingStages = [
   {
     id: 'recommendation',
@@ -403,6 +434,41 @@ export default function GrowthLoop() {
         </div>
         <p className="growth-action-panel__note">
           No execution impact or learning uplift is estimated until recommendation actions and outcome windows are logged in the data layer.
+        </p>
+      </GlassCard>
+
+      <GlassCard interactive={false} className="growth-rep-panel">
+        <div className="growth-panel-head">
+          <div><span>Engagement / REP Engine</span><h2>BEA Narrative Labels for Retention Analytics</h2></div>
+          <small>RFM, Cohort, Journey, Churn, and CLV stay as existing analytics; this layer explains how they work together in the BEA framework.</small>
+        </div>
+        <div className="growth-rep-panel__tracks">
+          {engagementRepLayers.map((layer) => {
+            const Icon = layer.icon
+            return (
+              <article className={`growth-rep-track growth-rep-track--${layer.id}`} key={layer.id}>
+                <Link className="growth-rep-track__head" to={layer.route}>
+                  <i><Icon size={19} strokeWidth={1.9} /></i>
+                  <div>
+                    <span>{layer.focus}</span>
+                    <strong>{layer.label}</strong>
+                    <p>{layer.role}</p>
+                  </div>
+                </Link>
+                <div className="growth-rep-track__evidence">
+                  {layer.evidence.map((item) => (
+                    <Link to={item.route} key={item.label}>
+                      <strong>{item.label}</strong>
+                      <small>{item.detail}</small>
+                    </Link>
+                  ))}
+                </div>
+              </article>
+            )
+          })}
+        </div>
+        <p className="growth-rep-panel__note">
+          Narasi BEA ini tidak mengubah data layer atau definisi metric. It gives the existing customer analytics a clearer business role: Engagement keeps customers active; REP measures repeat, retention, expansion, and value creation.
         </p>
       </GlassCard>
 

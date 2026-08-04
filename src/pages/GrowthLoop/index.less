@@ -285,6 +285,7 @@
 .growth-loop-map,
 .growth-traffic-panel,
 .growth-action-panel,
+.growth-rep-panel,
 .growth-engine-panel,
 .growth-decision-panel {
   gap: @space-4;
@@ -683,6 +684,161 @@
 }
 
 
+.growth-rep-panel {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -24% -12% auto 54%;
+    z-index: -1;
+    height: 68%;
+    border-radius: 999px;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 36% 46%, fade(@secondary, 18%), transparent 62%),
+      radial-gradient(circle at 62% 42%, fade(@success, 16%), transparent 58%);
+    filter: blur(24px);
+  }
+
+  &__tracks {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: @space-4;
+  }
+
+  &__note {
+    margin: 0;
+    padding: 12px 14px;
+    border-radius: @radius-md;
+    color: @text-secondary;
+    background: linear-gradient(145deg, rgba(var(--tint), .5), rgba(var(--tint), .24));
+    border: 1px solid rgba(var(--edge), .36);
+    font-size: @fs-xs;
+    line-height: 1.55;
+  }
+}
+
+.growth-rep-track {
+  min-width: 0;
+  display: grid;
+  gap: 12px;
+  padding: 15px;
+  border-radius: @radius-lg;
+  border: 1px solid rgba(var(--edge), .38);
+  background:
+    radial-gradient(circle at 92% 6%, fade(@secondary, 12%), transparent 34%),
+    linear-gradient(145deg, rgba(var(--tint), .56), rgba(var(--tint), .25));
+  box-shadow:
+    inset 0 1px 0 rgba(var(--edge), .62),
+    0 14px 30px rgba(var(--shade), .08);
+
+  &--rep {
+    background:
+      radial-gradient(circle at 92% 6%, fade(@success, 12%), transparent 34%),
+      linear-gradient(145deg, rgba(var(--tint), .56), rgba(var(--tint), .25));
+  }
+
+  &__head {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 12px;
+    border-radius: @radius-md;
+
+    &:focus-visible { .glass-focus(); }
+  }
+
+  &__head i {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    color: @white;
+    border-radius: @radius-md;
+    background:
+      radial-gradient(circle at 28% 18%, rgba(255, 255, 255, .56), transparent 36%),
+      linear-gradient(150deg, fade(@secondary, 86%), fade(@primary, 68%));
+    box-shadow:
+      0 12px 24px fade(@secondary, 16%),
+      inset 0 1px 0 rgba(var(--edge), .58);
+  }
+
+  &--rep &__head i {
+    background:
+      radial-gradient(circle at 28% 18%, rgba(255, 255, 255, .56), transparent 36%),
+      linear-gradient(150deg, fade(@success, 86%), fade(@cyan, 68%));
+    box-shadow:
+      0 12px 24px fade(@success, 14%),
+      inset 0 1px 0 rgba(var(--edge), .58);
+  }
+
+  &__head div {
+    min-width: 0;
+    display: grid;
+    gap: 5px;
+  }
+
+  &__head span {
+    color: @text-muted;
+    font-size: 10px;
+    font-weight: @fw-bold;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  &__head strong {
+    color: @text-primary;
+    font-size: @fs-xl;
+    line-height: 1.14;
+  }
+
+  &__head p {
+    color: @text-secondary;
+    font-size: @fs-sm;
+    line-height: 1.5;
+  }
+
+  &__evidence {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  &__evidence a {
+    min-height: 104px;
+    display: grid;
+    align-content: start;
+    gap: 6px;
+    padding: 11px;
+    border-radius: @radius-md;
+    border: 1px solid rgba(var(--edge), .3);
+    background: rgba(var(--tint), .28);
+    transition: transform @duration @ease-out, border-color @duration @ease-out, background @duration @ease-out;
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: fade(@cyan, 36%);
+      background: rgba(var(--tint), .4);
+    }
+
+    &:focus-visible { .glass-focus(); }
+  }
+
+  &__evidence strong {
+    color: @text-primary;
+    font-size: @fs-sm;
+    line-height: 1.2;
+  }
+
+  &__evidence small {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.48;
+  }
+}
+
+
 .growth-engine-panel__list,
 .growth-decision-panel ol {
   display: grid;
@@ -798,7 +954,8 @@
 
   .growth-loop-map__steps,
   .growth-traffic-panel__sources,
-  .growth-action-panel__stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .growth-action-panel__stages,
+  .growth-rep-panel__tracks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: @breakpoint-tablet) {
@@ -817,7 +974,15 @@
   .growth-loop-map__steps,
   .growth-traffic-panel__sources,
   .growth-action-panel__stages,
+  .growth-rep-panel__tracks,
   .growth-decision-panel__metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+@media (max-width: 560px) {
+  .growth-rep-track__evidence {
     grid-template-columns: 1fr;
   }
 }
