@@ -6,11 +6,15 @@ import {
   CheckCircle2,
   Database,
   Gauge,
+  Instagram,
   Lightbulb,
+  MapPin,
   Megaphone,
   RefreshCcw,
+  MessageSquare,
   Route,
   Sparkles,
+  Star,
   Target,
   TrendingUp,
   Users,
@@ -88,8 +92,8 @@ const engines = [
     label: 'Traffic Engine',
     icon: Megaphone,
     route: '/marketing-analytics/campaign-performance',
-    outcome: 'Read paid traffic quality and cross-channel campaign performance.',
-    pages: ['Google Ads', 'Meta Ads', 'YouTube Ads', 'Campaign Performance'],
+    outcome: 'Read paid, organic, reputation, influencer, and local discovery signals as one traffic system.',
+    pages: ['Google Ads', 'Meta Ads', 'YouTube Ads', 'Organic Social', 'Influencer', 'Rating & Review'],
   },
   {
     id: 'conversion',
@@ -114,6 +118,98 @@ const engines = [
     route: '/predictive-analytics/customer-lifetime-value-prediction',
     outcome: 'Drive repeat order, retention, and predictive value with CLV and forecast views.',
     pages: ['CLV Prediction', 'Sales Forecast', 'Demand Forecast', 'Churn Prediction'],
+  },
+]
+
+const actionTrackingStages = [
+  {
+    id: 'recommendation',
+    label: 'Recommendation',
+    icon: Target,
+    status: 'Connected',
+    description: 'Evidence-backed recommendations are already available as the starting point of the action loop.',
+    signals: ['Evidence', 'Target', 'Owner', 'Priority'],
+  },
+  {
+    id: 'execution',
+    label: 'Execution',
+    icon: Activity,
+    status: 'Tracking missing',
+    description: 'Action events need to capture owner, start date, completion status, cost, and affected scope.',
+    signals: ['Action ID', 'Owner', 'Status', 'Window'],
+  },
+  {
+    id: 'result',
+    label: 'Result',
+    icon: BarChart3,
+    status: 'Measurement missing',
+    description: 'Outcome windows and before-after KPI evidence are required before impact can be reported.',
+    signals: ['KPI Delta', 'Revenue', 'Retention', 'Cost'],
+  },
+  {
+    id: 'learning',
+    label: 'Learning Loop',
+    icon: RefreshCcw,
+    status: 'Feedback planned',
+    description: 'Measured outcomes should feed recommendation reliability, prioritization, and model backtests.',
+    signals: ['Outcome Label', 'Reliability', 'Backtest', 'Next Priority'],
+  },
+]
+
+const trafficEngineSources = [
+  {
+    id: 'paid-media',
+    label: 'Paid Media Performance',
+    icon: Megaphone,
+    status: 'Connected',
+    route: '/marketing-analytics/campaign-performance',
+    description: 'Google Ads, Meta Ads, YouTube Ads, and cross-channel campaign performance are already represented in the marketing layer.',
+    signals: ['Spend', 'Clicks', 'Conversions', 'ROAS'],
+  },
+  {
+    id: 'google-maps-review',
+    label: 'Google Maps Review',
+    icon: MapPin,
+    status: 'Source planned',
+    route: '/customer-insights/persepsi-pelanggan',
+    description: 'Local discovery, store rating, review volume, review recency, and outlet-level reputation should feed perception and traffic quality.',
+    signals: ['Rating', 'Review Volume', 'Recency', 'Outlet Reputation'],
+  },
+  {
+    id: 'organic-social',
+    label: 'TikTok / Instagram Organic',
+    icon: Instagram,
+    status: 'Source planned',
+    route: '/marketing-analytics/campaign-performance',
+    description: 'Organic reach, engagement, saves, shares, and content velocity should be separated from paid campaign traffic.',
+    signals: ['Reach', 'Engagement', 'Shares', 'Content Velocity'],
+  },
+  {
+    id: 'influencer',
+    label: 'Influencer & Creator Traffic',
+    icon: Users,
+    status: 'Source planned',
+    route: '/marketing-analytics/attribution',
+    description: 'Creator mentions, promo codes, affiliate links, and campaign windows can enrich traffic source classification without claiming causality.',
+    signals: ['Creator Mentions', 'Promo Codes', 'Affiliate Links', 'Campaign Window'],
+  },
+  {
+    id: 'rating-review',
+    label: 'Rating / Review Intelligence',
+    icon: Star,
+    status: 'Source planned',
+    route: '/customer-insights/persepsi-pelanggan',
+    description: 'Structured review attributes should support perception, pain point detection, and outlet prioritization once review data exists.',
+    signals: ['Topic Tags', 'Sentiment Label', 'Issue Frequency', 'Outlet Priority'],
+  },
+  {
+    id: 'ugc-word-of-mouth',
+    label: 'UGC & Word of Mouth',
+    icon: MessageSquare,
+    status: 'Source planned',
+    route: '/ai-insight',
+    description: 'User-generated posts, comments, and community conversation are useful as qualitative demand signals when captured with source reliability.',
+    signals: ['Mentions', 'Comments', 'UGC Posts', 'Reliability'],
   },
 ]
 
@@ -245,6 +341,69 @@ export default function GrowthLoop() {
             )
           })}
         </div>
+      </GlassCard>
+
+      <GlassCard interactive={false} className="growth-traffic-panel">
+        <div className="growth-panel-head">
+          <div><span>Traffic Engine Coverage</span><h2>Paid, Organic, Reputation, and Creator Signals</h2></div>
+          <small>Organic and review sources are mapped as planned inputs, not fabricated metrics.</small>
+        </div>
+        <div className="growth-traffic-panel__sources">
+          {trafficEngineSources.map((source) => {
+            const Icon = source.icon
+            return (
+              <Link className="growth-traffic-source" to={source.route} key={source.id}>
+                <i><Icon size={18} strokeWidth={1.9} /></i>
+                <div>
+                  <span>{source.status}</span>
+                  <strong>{source.label}</strong>
+                  <p>{source.description}</p>
+                  <small>{source.signals.join(' - ')}</small>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
+        <p className="growth-traffic-panel__note">
+          Data layer saat ini sudah mencakup paid campaign analytics. Google Maps review, organic social, influencer, dan rating/review perlu connector atau ingest pipeline sebelum bisa dihitung sebagai metric aktif.
+        </p>
+      </GlassCard>
+
+      <GlassCard interactive={false} className="growth-action-panel">
+        <div className="growth-panel-head">
+          <div><span>Action Tracking Loop</span><h2>Recommendation to Execution to Learning</h2></div>
+          <small>Execution outcome tracking is mapped as a required layer, not shown as measured impact yet.</small>
+        </div>
+        <div className="growth-action-panel__summary">
+          <div>
+            <span>Belum ada action tracking</span>
+            <strong>Closed-loop instrumentation is not active yet</strong>
+            <p>
+              Recommendation generation is available, but execution events, outcome measurement, and feedback learning are not yet captured as one operational loop.
+            </p>
+          </div>
+          <em>{data.recommendations.length} recommendations ready to track</em>
+        </div>
+        <div className="growth-action-panel__stages">
+          {actionTrackingStages.map((stage, index) => {
+            const Icon = stage.icon
+            return (
+              <article className={`growth-action-stage growth-action-stage--${stage.id}`} key={stage.id}>
+                <span className="growth-action-stage__index">0{index + 1}</span>
+                <i><Icon size={18} strokeWidth={1.9} /></i>
+                <div>
+                  <em>{stage.status}</em>
+                  <strong>{stage.label}</strong>
+                  <p>{stage.description}</p>
+                  <small>{stage.signals.join(' - ')}</small>
+                </div>
+              </article>
+            )
+          })}
+        </div>
+        <p className="growth-action-panel__note">
+          No execution impact or learning uplift is estimated until recommendation actions and outcome windows are logged in the data layer.
+        </p>
       </GlassCard>
 
       <section className="growth-loop-page__grid">
