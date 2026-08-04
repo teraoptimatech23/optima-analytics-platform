@@ -1,0 +1,317 @@
+@import '@/styles/mixins.less';
+
+.growth-loop-page {
+  display: grid;
+  gap: @grid-gap;
+  position: relative;
+  z-index: 1;
+
+  &__hero {
+    min-height: 170px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: @space-5;
+  }
+
+  &__hero h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__badge {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 13px;
+    border-radius: @radius-md;
+    color: @text-secondary;
+    border: 1px solid rgba(var(--edge), .58);
+    background: linear-gradient(145deg, rgba(var(--tint), .74), rgba(var(--tint), .36));
+    box-shadow: inset 0 1px 0 rgba(var(--edge), .72);
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+  }
+
+  &__evidence {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: @space-4;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(360px, .8fr);
+    gap: @space-4;
+  }
+
+  &__source {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.5;
+  }
+}
+
+.growth-evidence-card {
+  min-height: 132px;
+  overflow: hidden;
+  gap: 8px;
+
+  span {
+    color: @text-muted;
+    font-size: @fs-xs;
+    font-weight: @fw-semibold;
+    text-transform: uppercase;
+  }
+
+  strong {
+    font-size: clamp(22px, 1.8vw, 32px);
+    line-height: 1.05;
+  }
+
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.45;
+  }
+}
+
+.growth-panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: @space-4;
+
+  span,
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.45;
+  }
+
+  span {
+    display: block;
+    font-weight: @fw-semibold;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 4px 0 0;
+    font-size: @fs-xl;
+  }
+}
+
+.growth-loop-map,
+.growth-engine-panel,
+.growth-decision-panel {
+  gap: @space-4;
+  overflow: hidden;
+}
+
+.growth-loop-map__steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 7%;
+    right: 7%;
+    top: 50%;
+    height: 1px;
+    background: linear-gradient(90deg, fade(@primary, 16%), fade(@cyan, 62%), fade(@secondary, 42%));
+  }
+}
+
+.growth-loop-step {
+  min-height: 210px;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 14px;
+  border-radius: @radius-md;
+  border: 1px solid rgba(var(--edge), .38);
+  background:
+    linear-gradient(145deg, rgba(var(--tint), .62), rgba(var(--tint), .28)),
+    rgba(var(--tint), .26);
+  box-shadow: inset 0 1px 0 rgba(var(--edge), .55);
+  transition: transform @duration @ease-out, border-color @duration @ease-out;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: fade(@cyan, 58%);
+  }
+
+  &__index {
+    color: @text-muted;
+    font-size: 11px;
+    font-weight: @fw-bold;
+  }
+
+  i {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    color: @white;
+    border-radius: 50%;
+    background: linear-gradient(180deg, fade(@primary, 88%), fade(@cyan, 68%));
+  }
+
+  strong {
+    font-size: @fs-lg;
+  }
+
+  em {
+    color: @text-secondary;
+    font-style: normal;
+    font-size: @fs-sm;
+    font-weight: @fw-semibold;
+  }
+
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.5;
+  }
+}
+
+.growth-engine-panel__list,
+.growth-decision-panel ol {
+  display: grid;
+  gap: 10px;
+}
+
+.growth-engine-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 12px;
+  padding: 13px;
+  border-radius: @radius-md;
+  border: 1px solid rgba(var(--edge), .34);
+  background: rgba(var(--tint), .32);
+  transition: transform @duration @ease-out, background @duration @ease-out;
+
+  &:hover {
+    transform: translateX(3px);
+    background: rgba(var(--tint), .44);
+  }
+
+  > i {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    color: @white;
+    border-radius: @radius-md;
+    background: linear-gradient(150deg, fade(@secondary, 82%), fade(@primary, 70%));
+  }
+
+  strong {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  p,
+  span {
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.5;
+  }
+
+  span {
+    display: block;
+    margin-top: 6px;
+    color: @text-secondary;
+    font-weight: @fw-semibold;
+  }
+}
+
+.growth-decision-panel__metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+
+  article {
+    min-height: 112px;
+    display: grid;
+    align-content: center;
+    gap: 6px;
+    padding: 12px;
+    border-radius: @radius-md;
+    border: 1px solid rgba(var(--edge), .34);
+    background: rgba(var(--tint), .32);
+  }
+
+  span,
+  small {
+    color: @text-muted;
+    font-size: @fs-xs;
+  }
+
+  strong {
+    font-size: @fs-2xl;
+  }
+}
+
+.growth-decision-panel ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: grid;
+    grid-template-columns: 22px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px;
+    border-radius: @radius-md;
+    border: 1px solid rgba(var(--edge), .3);
+    background: rgba(var(--tint), .24);
+  }
+
+  svg {
+    color: @success;
+    margin-top: 2px;
+  }
+
+  span {
+    display: block;
+    margin-top: 4px;
+    color: @text-muted;
+    font-size: @fs-xs;
+    line-height: 1.5;
+  }
+}
+
+@media (max-width: @breakpoint-laptop) {
+  .growth-loop-page {
+    &__evidence { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    &__grid { grid-template-columns: 1fr; }
+  }
+
+  .growth-loop-map__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: @breakpoint-tablet) {
+  .growth-loop-page__hero,
+  .growth-panel-head {
+    display: grid;
+  }
+
+  .growth-loop-page__badge {
+    width: fit-content;
+  }
+}
+
+@media (max-width: @breakpoint-mobile) {
+  .growth-loop-page__evidence,
+  .growth-loop-map__steps,
+  .growth-decision-panel__metrics {
+    grid-template-columns: 1fr;
+  }
+}

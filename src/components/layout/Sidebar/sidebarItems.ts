@@ -44,6 +44,13 @@ export type SidebarMenuNode = SidebarLeafItem | SidebarSection
 export const sidebarItems: SidebarMenuNode[] = [
   { id: 'summary', label: 'Ringkasan', icon: Home, path: '/' },
   {
+    id: 'growth-loop',
+    label: 'Growth Loop',
+    icon: Sparkles,
+    path: '/growth-loop',
+    description: 'DDDVL Command Center yang menghubungkan data, insight, keputusan, value, dan learning loop.',
+  },
+  {
     id: 'customer-insights',
     label: 'Customer Insights',
     icon: CircleUserRound,
@@ -205,6 +212,8 @@ export const sidebarItems: SidebarMenuNode[] = [
 
 export const legacyRedirects: Record<string, string> = {
   '/dashboard': '/',
+  '/dddvl': '/growth-loop',
+  '/growth-loop-command-center': '/growth-loop',
   '/profil-pelanggan': '/customer-insights/profil-pelanggan',
   '/kebutuhan-pelanggan': '/customer-insights/kebutuhan-pelanggan',
   '/pain-points': '/customer-insights/pain-points',
