@@ -4,21 +4,21 @@
   .button-reset();
   position: relative;
   min-width: 0;
-  min-height: 46px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 0 12px;
   color: @text-secondary;
   text-decoration: none;
-  border-radius: @radius-md;
+  border-radius: @radius-sm;
   border: 1px solid transparent;
   transition:
-    color @duration @ease-out,
-    background @duration @ease-out,
-    border-color @duration @ease-out,
-    box-shadow @duration @ease-out,
-    transform @duration @ease-out;
+    color 180ms @ease-out,
+    background 180ms @ease-out,
+    border-color 180ms @ease-out,
+    box-shadow 180ms @ease-out,
+    transform 180ms @ease-out;
 
   &__icon,
   &__label {
@@ -28,7 +28,8 @@
 
   &__icon {
     flex: 0 0 auto;
-    transition: transform @duration @ease-out, filter @duration @ease-out;
+    color: @text-muted;
+    transition: color 180ms @ease-out, transform 180ms @ease-out, filter 180ms @ease-out;
   }
 
   &__label {
@@ -37,86 +38,78 @@
     font-weight: @fw-medium;
   }
 
-  // Frosted pill that materialises under the cursor.
   &:not(.sidebar-item--active):hover {
-    color: @primary-dark;
-    background: linear-gradient(145deg, rgba(var(--tint), 0.82), rgba(var(--tint), 0.44));
-    border-color: rgba(var(--edge), 0.88);
-    box-shadow:
-      0 8px 20px rgba(var(--shade), .12),
-      inset 0 1px 0 rgba(var(--edge), 0.96);
-    transform: translateY(-1px);
+    color: @text-primary;
+    background: var(--sidebar-hover);
+    border-color: var(--sidebar-hover-border);
+    transform: translateX(2px);
 
-    .sidebar-item__icon { transform: scale(1.08); }
+    .sidebar-item__icon {
+      color: @primary-dark;
+      transform: scale(1.02);
+    }
   }
 
   &:focus-visible { .glass-focus(); }
 
-  // Shared highlight — position is animated by Framer, styling lives here.
   &__indicator {
     position: absolute;
-    // -1px so the pill covers the button's transparent border box exactly.
-    inset: -1px;
+    inset: 0;
     z-index: 0;
     overflow: hidden;
-    border-radius: @radius-md;
-    background: @gradient-active;
-    border: 1px solid rgba(var(--edge), 0.52);
-    box-shadow:
-      0 14px 30px fade(@primary, 42%),
-      0 2px 6px fade(@secondary, 28%),
-      inset 0 1px 0 rgba(var(--edge), 0.58),
-      inset 0 -3px 8px rgba(46, 28, 140, .3);
+    border-radius: @radius-sm;
+    background: var(--sidebar-active);
+    border: 1px solid var(--sidebar-active-border);
+    box-shadow: var(--sidebar-active-shadow);
 
-    // Glossy cap over the top half of the pill.
     &::before {
       content: '';
       position: absolute;
-      inset: 1px 8px auto;
-      height: 48%;
-      border-radius: @radius-md @radius-md 60% 60% / @radius-md @radius-md 100% 100%;
-      background: linear-gradient(180deg, rgba(var(--edge), 0.4), transparent);
+      left: 6px;
+      top: 50%;
+      width: 3px;
+      height: 22px;
+      border-radius: @radius-pill;
+      background: @primary;
+      box-shadow: 0 0 10px fade(@primary, 22%);
+      transform: translateY(-50%);
     }
 
-    // Bright liquid pooling behind the icon.
     &::after {
       content: '';
       position: absolute;
-      left: -6%;
-      top: -40%;
-      width: 52%;
-      height: 180%;
-      border-radius: 50%;
-      background: radial-gradient(circle at 50% 50%, rgba(var(--edge), 0.4), transparent 62%);
-      filter: blur(9px);
+      inset: 1px;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(var(--edge), .16), transparent 58%);
+      pointer-events: none;
     }
   }
 
   &--active {
-    color: @white;
+    color: var(--sidebar-active-text);
 
     .sidebar-item__label { font-weight: @fw-semibold; }
 
     .sidebar-item__icon {
-      color: @white;
-      filter: drop-shadow(0 2px 4px rgba(24, 14, 92, .35));
+      color: @primary-dark;
+      filter: none;
     }
 
     &:hover {
-      transform: translateY(-1px);
+      transform: translateX(1px);
 
       .sidebar-item__indicator {
-        box-shadow:
-          0 18px 34px fade(@primary, 48%),
-          inset 0 1px 0 rgba(var(--edge), 0.64),
-          inset 0 -3px 8px rgba(46, 28, 140, .3);
+        border-color: var(--sidebar-hover-border);
+        box-shadow: var(--sidebar-active-shadow);
       }
     }
   }
 
   &--nested {
-    min-height: 39px;
+    min-height: 38px;
     padding-inline: 10px;
+    border-radius: 10px;
+    color: @text-muted;
 
     .sidebar-item__icon {
       width: 17px;
@@ -126,12 +119,65 @@
     .sidebar-item__label {
       font-size: 12px;
     }
+
+    &:not(.sidebar-item--active):hover {
+      background: rgba(var(--tint), .24);
+      border-color: var(--sidebar-hover-border);
+    }
+
+    &.sidebar-item--active {
+      color: var(--sidebar-active-text);
+
+      .sidebar-item__icon { color: @primary-dark; }
+    }
+
+    .sidebar-item__indicator {
+      background: rgba(47, 115, 255, .07);
+      border-color: rgba(47, 115, 255, .13);
+      box-shadow: none;
+
+      &::before {
+        left: 8px;
+        width: 5px;
+        height: 5px;
+        background: @primary;
+        box-shadow: 0 0 8px fade(@primary, 18%);
+      }
+
+      &::after { display: none; }
+    }
+  }
+}
+
+:root[data-theme='dark'] .sidebar-item {
+  &__icon { color: @text-muted; }
+
+  &:not(.sidebar-item--active):hover {
+    color: @text-primary;
+
+    .sidebar-item__icon { color: @primary-dark; }
+  }
+
+  &--active {
+    color: var(--sidebar-active-text);
+
+    .sidebar-item__icon { color: #8fb8ff; }
+  }
+
+  &--nested .sidebar-item__indicator {
+    background: rgba(47, 115, 255, .13);
+    border-color: rgba(93, 151, 255, .22);
   }
 }
 
 .sidebar--collapsed .sidebar-item {
   justify-content: center;
   padding-inline: 0;
+
+  .sidebar-item__indicator::before {
+    left: 5px;
+    height: 20px;
+  }
 
   &__label { display: none; }
 }

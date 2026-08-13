@@ -7,6 +7,7 @@ import {
   GalleryVerticalEnd,
   Gauge,
   Home,
+  LayoutDashboard,
   Lightbulb,
   LineChart,
   Megaphone,
@@ -42,7 +43,8 @@ export interface SidebarSection {
 export type SidebarMenuNode = SidebarLeafItem | SidebarSection
 
 export const sidebarItems: SidebarMenuNode[] = [
-  { id: 'summary', label: 'Overview', icon: Home, path: '/' },
+  { id: 'summary', label: 'Summary', icon: LayoutDashboard, path: '/summary' },
+  { id: 'overview', label: 'Overview', icon: Home, path: '/' },
   {
     id: 'growth-loop',
     label: 'Growth Loop',

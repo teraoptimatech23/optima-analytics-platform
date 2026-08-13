@@ -4,6 +4,7 @@ import ProtectedRoute from '@/router/ProtectedRoute'
 import { flattenSidebarItems, legacyRedirects } from '@/components/layout/Sidebar/sidebarItems'
 import Login from '@/pages/Login'
 import GrowthLoop from '@/pages/GrowthLoop'
+import Summary from '@/pages/Summary'
 import Dashboard from '@/pages/Dashboard'
 import CustomerProfile from '@/pages/CustomerProfile'
 import CustomerNeeds from '@/pages/CustomerNeeds'
@@ -30,6 +31,7 @@ import Recommendation from '@/pages/Recommendation'
 
 const implementedRoutes = new Set([
   '/',
+  '/summary',
   '/growth-loop',
   '/customer-insights/profil-pelanggan',
   '/customer-insights/kebutuhan-pelanggan',
@@ -65,6 +67,7 @@ export default function AppRouter() {
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route index element={<Dashboard />} />
+          <Route path="/summary" element={<Summary />} />
           <Route path="/growth-loop" element={<GrowthLoop />} />
           <Route path="/customer-insights/profil-pelanggan" element={<CustomerProfile />} />
           <Route path="/customer-insights/kebutuhan-pelanggan" element={<CustomerNeeds />} />
