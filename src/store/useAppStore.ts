@@ -13,10 +13,7 @@ export const useAppStore = create<AppState>((set) => ({
   sidebarCollapsed: false,
   mobileSidebarOpen: false,
   expandedSidebarSections: {
-    'customer-insights': true,
-    'purchase-analytics': true,
-    'marketing-analytics': false,
-    'predictive-analytics': false,
+    'digital-value-loop': true,
   },
   toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
   toggleSidebarSection: (id) =>

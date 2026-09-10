@@ -8,20 +8,18 @@ import {
   HeartPulse,
   LineChart,
   Megaphone,
-  RefreshCcw,
   ShieldCheck,
   ShoppingCart,
-  Sparkles,
   Target,
   TrendingUp,
   Users,
-  Workflow,
 } from 'lucide-react'
 import { useEffect, useRef, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import type { LucideIcon } from 'lucide-react'
 import StateMessage from '@/components/common/StateMessage/StateMessage'
 import DashboardSkeleton from '@/components/dashboard/DashboardSkeleton/DashboardSkeleton'
+import { valueLoopStages } from '@/config/valueLoop'
 import { useInsights } from '@/hooks/useInsights'
 import { useDashboardStore } from '@/store/useDashboardStore'
 import './index.less'
@@ -37,34 +35,15 @@ const kpiCards = [
   { label: 'Marketing ROI', value: '4,6x', delta: '0,6x', tone: 'pink', icon: TrendingUp, trend: [12, 18, 22, 20, 31, 28, 39, 35, 46, 50, 58] },
 ]
 
-const engines = [
-  { id: 'customer-intelligence', label: 'Customer Intelligence', score: 89, status: 'Healthy', tone: 'blue', icon: Users, route: '/customer-insights/profil-pelanggan', copy: 'Memahami pelanggan dan perilaku mereka' },
-  { id: 'customer-journey', label: 'Customer Journey', score: 82, status: 'Good', tone: 'purple', icon: Workflow, route: '/purchase-analytics/customer-journey', copy: 'Perjalanan pelanggan cukup efisien' },
-  { id: 'traffic-engine', label: 'Traffic Engine', score: 86, status: 'Good', tone: 'orange', icon: Megaphone, route: '/marketing-analytics/campaign-performance', copy: 'Akuisisi stabil, efisiensi kanal perlu ditingkatkan' },
-  { id: 'conversion-engine', label: 'Conversion Engine', score: 69, status: 'Needs Attention', tone: 'pink', icon: ShoppingCart, route: '/purchase-analytics/perilaku-pembelian', copy: 'Drop-off terbesar terjadi di checkout', drag: true },
-  { id: 'engagement-engine', label: 'Engagement Engine', score: 90, status: 'Healthy', tone: 'cyan', icon: RefreshCcw, route: '/customer-insights/motivasi-pelanggan', copy: 'Engagement tinggi, pelanggan aktif' },
-  { id: 'rep-engine', label: 'Retention, Value & Profit Engine', score: 91, status: 'Excellent', tone: 'purple', icon: BarChart3, route: '/purchase-analytics/rfm-analysis', copy: 'Pelanggan loyal dan memberi nilai tinggi' },
-]
 const engineVisualConfig: Record<string, { number: string; tone: string; statusTone: string }> = {
-  'customer-intelligence': { number: '1', tone: 'blue', statusTone: 'green' },
-  'customer-journey': { number: '2', tone: 'purple', statusTone: 'blue' },
-  'traffic-engine': { number: '3', tone: 'orange', statusTone: 'orange' },
-  'conversion-engine': { number: '4', tone: 'pink', statusTone: 'pink' },
-  'engagement-engine': { number: '5', tone: 'cyan', statusTone: 'green' },
-  'rep-engine': { number: '6', tone: 'violet', statusTone: 'violet' },
+  'customer-behavior': { number: '1', tone: 'blue', statusTone: 'green' },
+  'traffic-acquisition': { number: '2', tone: 'orange', statusTone: 'orange' },
+  engagement: { number: '3', tone: 'cyan', statusTone: 'green' },
+  retention: { number: '4', tone: 'green', statusTone: 'violet' },
+  'value-optimization': { number: '5', tone: 'pink', statusTone: 'pink' },
 }
-const marketingRows = [
-  { channel: 'Google Ads', roas: '5,2x', revenue: '31%', action: 'Scale', tone: 'green' },
-  { channel: 'Instagram', roas: '4,6x', revenue: '24%', action: 'Scale', tone: 'green' },
-  { channel: 'TikTok', roas: '2,1x', revenue: '18%', action: 'Optimize', tone: 'orange' },
-  { channel: 'Facebook', roas: '1,8x', revenue: '8%', action: 'Reduce', tone: 'red' },
-  { channel: 'Direct', roas: '3,0x', revenue: '12%', action: 'Maintain', tone: 'blue' },
-]
 
-const retentionTrend = [78, 84, 82, 88, 92, 96]
-const clvTrend = [118, 135, 142, 158, 171, 182]
-const chartMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
-const growthChartData = [
+const GrowthChartData = [
   { month: 'Jan', revenue: 28, profit: 160 },
   { month: 'Feb', revenue: 31, profit: 185 },
   { month: 'Mar', revenue: 37, profit: 245 },
@@ -72,25 +51,16 @@ const growthChartData = [
   { month: 'May', revenue: 45, profit: 355 },
   { month: 'Jun', revenue: 54, profit: 470 },
 ]
-const funnelVisualRows = [
+const FunnelVisualRows = [
   { label: 'Visitors', value: '52.350', rate: '84%', loss: '43.930', lossRate: '(84%)', tone: 'blue', width: 156 },
   { label: 'Add to Cart', value: '8.420', rate: '62%', loss: '5.240', lossRate: '(62%)', tone: 'purple', width: 124 },
   { label: 'Checkout', value: '3.180', rate: '31%', loss: '988', lossRate: '(31%)', tone: 'pink', width: 92 },
   { label: 'Purchase', value: '2.192', rate: '-', loss: '-', lossRate: '', tone: 'green', width: 60 },
 ]
-const channelIcons: Record<string, string> = {
-  'Google Ads': 'G',
-  Instagram: 'IG',
-  TikTok: 'TT',
-  Facebook: 'f',
-  Direct: 'D',
-}
-const businessCardRoutes = {
-  growth: '/growth-loop',
-  leakage: '/purchase-analytics/perilaku-pembelian',
-  marketing: '/marketing-analytics/campaign-performance',
-  value: '/purchase-analytics/rfm-analysis',
-} as const
+const ChannelIcons: Record<string, string> = { 'Google Ads': 'G', Instagram: 'IG', TikTok: 'TT', Facebook: 'f', Direct: 'D' }
+const RetentionTrend = [78, 84, 82, 88, 92, 96]
+const ClvTrend = [118, 135, 142, 158, 171, 182]
+const ChartMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
 
 function Sparkline({ points, tone = 'blue' }: { points: number[]; tone?: string }) {
   const max = Math.max(...points)
@@ -160,9 +130,9 @@ function GrowthComboChart() {
   const innerHeight = height - top - bottom
   const maxRevenue = 60
   const maxProfit = 700
-  const xStep = innerWidth / Math.max(1, growthChartData.length - 1)
+  const xStep = innerWidth / Math.max(1, GrowthChartData.length - 1)
   const barWidth = 15
-  const profitPoints = growthChartData.map((item, index) => {
+  const profitPoints = GrowthChartData.map((item, index) => {
     const x = left + index * xStep
     const y = top + innerHeight - (item.profit / maxProfit) * innerHeight
     return { x, y, item }
@@ -186,7 +156,7 @@ function GrowthComboChart() {
           const y = top + innerHeight - (tick / maxProfit) * innerHeight
           return <text key={tick} x={width - right + 8} y={y + 4} className="summary-chart-axis">{tick === 0 ? '0' : `${tick}M`}</text>
         })}
-        {growthChartData.map((item, index) => {
+        {GrowthChartData.map((item, index) => {
           const x = left + index * xStep
           const barHeight = (item.revenue / maxRevenue) * innerHeight
           const y = top + innerHeight - barHeight
@@ -208,7 +178,7 @@ function RevenueLeakageFunnel() {
   return (
     <div className="summary-funnel-matrix" aria-label="Revenue leakage funnel">
       <div className="summary-funnel-matrix__right-head">Potential Loss</div>
-      {funnelVisualRows.map((row) => {
+      {FunnelVisualRows.map((row) => {
         const outer = (170 - row.width) / 2
         const topInset = outer
         const bottomInset = outer + 10
@@ -227,7 +197,7 @@ function RevenueLeakageFunnel() {
 }
 
 function MarketingChannelIcon({ channel }: { channel: string }) {
-  return <span className={`summary-channel-icon summary-channel-icon--${channel.toLowerCase().replace(/\s+/g, '-')}`}>{channelIcons[channel] ?? channel.charAt(0)}</span>
+  return <span className={`summary-channel-icon summary-channel-icon--${channel.toLowerCase().replace(/\s+/g, '-')}`}>{ChannelIcons[channel] ?? channel.charAt(0)}</span>
 }
 
 function CustomerValueChart() {
@@ -239,9 +209,9 @@ function CustomerValueChart() {
   const bottom = 24
   const innerWidth = width - left - right
   const innerHeight = height - top - bottom
-  const xStep = innerWidth / Math.max(1, chartMonths.length - 1)
-  const retentionPoints = retentionTrend.map((value, index) => ({ x: left + index * xStep, y: top + innerHeight - ((value - 50) / 50) * innerHeight, value }))
-  const clvPoints = clvTrend.map((value, index) => ({ x: left + index * xStep, y: top + innerHeight - (value / 250) * innerHeight, value }))
+  const xStep = innerWidth / Math.max(1, ChartMonths.length - 1)
+  const retentionPoints = RetentionTrend.map((value, index) => ({ x: left + index * xStep, y: top + innerHeight - ((value - 50) / 50) * innerHeight, value }))
+  const clvPoints = ClvTrend.map((value, index) => ({ x: left + index * xStep, y: top + innerHeight - (value / 250) * innerHeight, value }))
   const retentionPath = retentionPoints.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ')
   const clvPath = clvPoints.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ')
   const clvFill = `${clvPath} L ${left + innerWidth} ${top + innerHeight} L ${left} ${top + innerHeight} Z`
@@ -270,7 +240,7 @@ function CustomerValueChart() {
         <path d={clvPath} className="summary-value-chart__line summary-value-chart__line--green" />
         {retentionPoints.map((point, index) => <circle key={`retention-${index}`} cx={point.x} cy={point.y} r="3.4" className="summary-value-chart__dot summary-value-chart__dot--blue" />)}
         {clvPoints.map((point, index) => <circle key={`clv-${index}`} cx={point.x} cy={point.y} r="3.4" className="summary-value-chart__dot summary-value-chart__dot--green" />)}
-        {chartMonths.map((month, index) => <text key={month} x={left + index * xStep} y={height - 6} textAnchor="middle" className="summary-chart-axis summary-chart-axis--month">{month}</text>)}
+        {ChartMonths.map((month, index) => <text key={month} x={left + index * xStep} y={height - 6} textAnchor="middle" className="summary-chart-axis summary-chart-axis--month">{month}</text>)}
       </svg>
     </div>
   )
@@ -320,7 +290,6 @@ export default function Summary() {
 
   const topInsight = data.kpiSummary.find((row) => row.onTarget) ?? data.kpiSummary[0]
   const riskInsight = data.painPoints[0]
-  const retentionRow = data.kpiSummary.find((row) => row.label.includes('Repeat'))
   const period = data.scope.periodLabel
   const priorityRecommendations = data.recommendations.slice(0, 3)
   const highImpactCount = priorityRecommendations.filter((item) => /high|tinggi/i.test(item.impact)).length
@@ -333,14 +302,14 @@ export default function Summary() {
     <div className="summary-page">
       <section className="summary-hero-grid" aria-label="Business health overview">
         <article className="summary-health-card">
-          <div className="summary-card-title">Business Health Score <span title="Weighted score from six business engines">i</span></div>
+          <div className="summary-card-title">Business Health Score <span title="Weighted executive health score">i</span></div>
           <div className="summary-gauge" style={{ '--score': healthScore } as React.CSSProperties}>
             <div className="summary-gauge__arc" />
             <strong>{healthScore}</strong><span>/100</span>
           </div>
           <div className="summary-health-card__status"><CheckCircle2 size={15} /> Healthy & Growing</div>
           <small>+4 pts vs Kuartal Lalu</small>
-          <em title="Main drag: Conversion Engine (-7 pts)"><AlertTriangle size={13} /> Conversion Engine menjadi hambatan utama -7 pts</em>
+          <em title="Main drag: Value Optimization (-7 pts)"><AlertTriangle size={13} /> Value Optimization menjadi hambatan utama -7 pts</em>
         </article>
 
         <div className="summary-kpi-strip">
@@ -361,74 +330,36 @@ export default function Summary() {
         </div>
       </section>
 
-      <section className="summary-engines" aria-label="6 business engines" ref={enginesSectionRef}>
+      <section className="summary-engines" aria-label="Digital Value Loop stages" ref={enginesSectionRef}>
         <div className="summary-engines__header">
-          <div className="summary-engines__title">6 Business Engines <span>i</span></div>
+          <div className="summary-engines__title">Digital Value Loop <span title="Five stages from customer behavior to economic value">i</span></div>
           <div className="summary-engine-stepper" aria-hidden="true">
             <span className="summary-engine-stepper__warning">!</span>
           </div>
         </div>
         <div className="summary-engine-grid">
-          {engines.map((engine, index) => {
+          {valueLoopStages.map((engine, index) => {
             const Icon = engine.icon
             const visual = engineVisualConfig[engine.id] ?? { number: `${index + 1}`, tone: engine.tone, statusTone: engine.tone }
             const needsAttention = /attention|critical|kritis/i.test(engine.status)
             return (
               <div className="summary-engine-item" key={engine.id}>
-                <a className={`summary-engine summary-engine--${visual.tone}${needsAttention ? ' is-drag' : ''}`} href={engine.route} ref={needsAttention ? conversionCardRef : undefined}>
+                <Link className={`summary-engine summary-engine--${visual.tone}${needsAttention ? ' is-drag' : ''}`} to={engine.route} ref={needsAttention ? conversionCardRef : undefined}>
                   <b className="summary-engine__number">{visual.number}</b>
                   <div className="summary-engine__head"><Icon size={30} /><strong>{engine.label}</strong></div>
                   <div className="summary-engine__score"><span>{engine.score}</span><small>/100</small></div>
                   <em className={`summary-engine__status summary-engine__status--${visual.statusTone}`}>{engine.status}</em>
-                  <p>{engine.copy}</p>
+                  <p>{engine.summary}</p>
                   <i className="summary-engine__cta"><ArrowRight size={17} /></i>
-                </a>
-                {index < engines.length - 1 && <span className="summary-engine-connector" aria-hidden="true"><ArrowRight size={25} /></span>}
+                </Link>
+                {index < valueLoopStages.length - 1 && <span className="summary-engine-connector" aria-hidden="true"><ArrowRight size={25} /></span>}
               </div>
             )
           })}
         </div>
       </section>
-      <section className="summary-analysis-grid" aria-label="Business analysis panels">
-        <BusinessMetricCard to={businessCardRoutes.growth} accent="growth" label="Growth & Profitability">
-          <BusinessMetricCardHeader index="1" title="Growth & Profitability" icon={LineChart} />
-          <div className="summary-profit-top">
-            <div><span>Revenue</span><strong>Rp4,62B</strong><small>+18,2%</small><em>vs Kuartal Lalu</em></div>
-            <div><span>Net Profit</span><strong>Rp852M</strong><small>+12,1%</small><em>vs Kuartal Lalu</em></div>
-          </div>
-          <GrowthComboChart />
-          <BusinessInsightStrip icon={TrendingUp} message="Pertumbuhan pendapatan kuat dengan profit yang sehat." />
-        </BusinessMetricCard>
-
-        <BusinessMetricCard to={businessCardRoutes.leakage} accent="leakage" label="Revenue Leakage">
-          <BusinessMetricCardHeader index="2" title="Revenue Leakage" icon={ShoppingCart} />
-          <RevenueLeakageFunnel />
-          <BusinessInsightStrip icon={AlertTriangle} accent="red" message="Kebocoran terbesar terjadi di checkout." label="Potential Revenue Recovery" value="Rp480M / quarter" />
-        </BusinessMetricCard>
-
-        <BusinessMetricCard to={businessCardRoutes.marketing} accent="marketing" label="Marketing Efficiency">
-          <BusinessMetricCardHeader index="3" title="Marketing Efficiency" icon={Target} />
-          <table className="summary-table">
-            <thead><tr><th>Channel</th><th>ROAS</th><th>Revenue Contribution</th><th>Action</th></tr></thead>
-            <tbody>{marketingRows.map((row) => <tr key={row.channel}><td><MarketingChannelIcon channel={row.channel} /><span>{row.channel}</span></td><td>{row.roas}</td><td>{row.revenue}</td><td><span className={`summary-action summary-action--${row.tone}`}>{row.action}</span></td></tr>)}</tbody>
-          </table>
-          <BusinessInsightStrip icon={Sparkles} accent="blue" message="Google Ads adalah channel paling efisien. TikTok dan Facebook memerlukan ROAS lift." />
-        </BusinessMetricCard>
-
-        <BusinessMetricCard to={businessCardRoutes.value} accent="value" label="Customer Value">
-          <BusinessMetricCardHeader index="4" title="Customer Value" icon={HeartPulse} />
-          <div className="summary-value-kpis">
-            <div><span>Retention Rate</span><strong>82%</strong><small>+6 pts</small><em>vs Kuartal Lalu</em></div>
-            <div><span>Repeat Purchase Rate</span><strong>{retentionRow?.current ?? '43%'}</strong><small>+3 pts</small><em>vs Kuartal Lalu</em></div>
-            <div><span>CLV</span><strong>Rp182K</strong><small>+12%</small><em>vs Kuartal Lalu</em></div>
-          </div>
-          <CustomerValueChart />
-          <BusinessInsightStrip icon={HeartPulse} message="Pelanggan makin loyal dan nilai seumur hidup semakin meningkat." />
-        </BusinessMetricCard>
-      </section>
-
       <section className="summary-bottom-grid" aria-label="Executive action summary">
-        <Link to="/ai-insight" className="summary-panel summary-list-panel summary-action-panel" aria-label="Buka semua key insights">
+        <Link to="/predictive-analytics?view=insights" className="summary-panel summary-list-panel summary-action-panel" aria-label="Buka semua key insights">
           <h3>Key Insights</h3>
           <ul>
             <li className="summary-insight-row summary-insight-row--green"><LineChart size={18} /><span>{topInsight?.label ?? 'Revenue'} membaik pada periode {period}.</span></li>
@@ -439,7 +370,7 @@ export default function Summary() {
           <span className="summary-bottom-cta">Lihat semua insight <ArrowRight size={14} /></span>
         </Link>
 
-        <Link to="/recommendation" className="summary-panel summary-rec-panel summary-action-panel" aria-label="Buka priority recommendations">
+        <Link to="/value-loop/value-optimization?view=recommendations" className="summary-panel summary-rec-panel summary-action-panel" aria-label="Buka priority recommendations">
           <h3>Priority Recommendations</h3>
           {priorityRecommendations.map((item, index) => {
             const Icon = recommendationIcons[index] ?? Target
@@ -464,14 +395,14 @@ export default function Summary() {
             <ShieldCheck size={52} />
             <div>
               <strong><span>Healthy & Growing</span><b>{healthScore}/100</b></strong>
-              <p>Conversion Engine adalah penghambat utama pertumbuhan saat ini. Prioritaskan optimasi checkout dan scale channel ber-ROAS tinggi untuk meningkatkan pendapatan secara signifikan.</p>
+              <p>Value Optimization adalah stage yang perlu perhatian. Prioritaskan optimasi checkout dan channel ber-ROAS tinggi untuk meningkatkan nilai pelanggan dan profit.</p>
             </div>
           </div>
           <div className="summary-impact"><span>{highImpactCount > 0 ? "High-Impact Opportunities" : "Priority Opportunities"}</span><b>{executiveImpactText}</b></div>
           <div className="summary-executive__stats">
             <span><small>Health Score</small><b>{healthScore}<em>/100</em></b><i>Healthy</i></span>
-            <span><small>Engine Priority</small><b>Conversion Engine</b><i>Needs Attention</i></span>
-            <span><small>Data Source</small><b>{data.scope.months.length} Sources</b><i>Connected</i></span>
+            <span><small>Stage Priority</small><b>Value Optimization</b><i>Needs Attention</i></span>
+            <span><small>Data Sources</small><b>7 Schemas</b><i>Adapter Ready</i></span>
           </div>
         </article>
       </section>

@@ -13,7 +13,7 @@ import {
   isSectionActive,
   isSidebarSection,
   sidebarItems,
-} from '@/components/layout/Sidebar/sidebarItems'
+} from '@/components/layout/Sidebar/valueLoopSidebarItems'
 import { useAppStore } from '@/store/useAppStore'
 import { useAuthStore } from '@/store/useAuthStore'
 import './Sidebar.less'

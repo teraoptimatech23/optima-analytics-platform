@@ -9,7 +9,13 @@ const topbar = readFileSync(resolve(root, 'src/components/layout/Topbar/Topbar.t
 const topbarStyles = readFileSync(resolve(root, 'src/components/layout/Topbar/Topbar.less'), 'utf8')
 const summary = readFileSync(resolve(root, 'src/pages/Summary/index.tsx'), 'utf8')
 const summaryStyles = readFileSync(resolve(root, 'src/pages/Summary/index.less'), 'utf8')
-const router = readFileSync(resolve(root, 'src/router/index.tsx'), 'utf8')
+const sidebarItems = readFileSync(resolve(root, 'src/components/layout/Sidebar/valueLoopSidebarItems.ts'), 'utf8')
+const valueLoopConfig = readFileSync(resolve(root, 'src/config/valueLoop.ts'), 'utf8')
+const valueLoopPage = readFileSync(resolve(root, 'src/pages/ValueLoop/index.tsx'), 'utf8')
+const predictivePage = readFileSync(resolve(root, 'src/pages/PredictiveAnalytics/index.tsx'), 'utf8')
+const dataSources = readFileSync(resolve(root, 'src/data/sources/index.ts'), 'utf8')
+const dataSourceTypes = readFileSync(resolve(root, 'src/data/sources/types.ts'), 'utf8')
+const router = readFileSync(resolve(root, 'src/router/valueLoopRouter.tsx'), 'utf8')
 
 const checks = [
   ['header logout class removed', !topbar.includes('topbar__logout') && !topbarStyles.includes('topbar__logout')],
@@ -31,16 +37,16 @@ const checks = [
   ['sidebar submenu active avoids white pill', sidebarItemStyles.includes('background: rgba(47, 115, 255, .07)') && sidebarItemStyles.includes('&.sidebar-item--active') && !sidebarItemStyles.includes('background: #fff')],
   ['sidebar hover is subtle horizontal motion', sidebarItemStyles.includes('transform: translateX(2px)') && sidebarStyles.includes('transform: translateX(2px)')],
   ['sidebar profile uses subtle shared surface tokens', sidebarStyles.includes('background: var(--sidebar-profile)') && sidebarStyles.includes('background: var(--sidebar-profile-hover)')],
-  ['summary business cards use semantic Link', summary.includes("import { Link } from 'react-router-dom'") && summary.includes('<Link to={to}') && summary.includes('summary-business-card')],
-  ['summary growth card destination is valid route', summary.includes("growth: '/growth-loop'") && router.includes('path="/growth-loop"')],
-  ['summary leakage card destination is valid route', summary.includes("leakage: '/purchase-analytics/perilaku-pembelian'") && router.includes('path="/purchase-analytics/perilaku-pembelian"')],
-  ['summary marketing card destination is valid route', summary.includes("marketing: '/marketing-analytics/campaign-performance'") && router.includes('path="/marketing-analytics/campaign-performance"')],
-  ['summary customer value card destination is valid route', summary.includes("value: '/purchase-analytics/rfm-analysis'") && router.includes('path="/purchase-analytics/rfm-analysis"')],
-  ['summary business card hover and cursor exist', summaryStyles.includes('.summary-business-card:hover') && summaryStyles.includes('cursor: pointer') && summaryStyles.includes('translateY(-3px)')],
-  ['summary business card focus visible exists', summaryStyles.includes('.summary-business-card:focus-visible') && summaryStyles.includes('outline-offset: 3px')],
-  ['summary CTA responds on card hover', summaryStyles.includes('.summary-business-card:hover .summary-insight-strip__cta') && summaryStyles.includes('translateX(2px)')],
-  ['summary interaction avoids transparent overlay', !/summary-business-card::(?:before|after)[\s\S]*inset:\s*0/.test(summaryStyles)],
-  ['summary business cards avoid nested interactive controls', !/<button[\s\S]*summary-business-card/.test(summary) && !/summary-business-card[\s\S]*<button/.test(summary.split('<section className="summary-analysis-grid"')[1]?.split('<section className="summary-bottom-grid"')[0] ?? '')],
+  ['sidebar uses Digital Value Loop information architecture', sidebar.includes('valueLoopSidebarItems') && sidebarItems.includes("label: 'Executive Summary'") && sidebarItems.includes("label: 'Digital Value Loop'")],
+  ['sidebar exposes exactly five Value Loop stages', ['Customer Behavior', 'Traffic Acquisition', 'Engagement', 'Retention', 'Value Optimization'].every((label) => valueLoopConfig.includes(`label: '${label}'`))],
+  ['old analytics tree is absent from active sidebar', !sidebarItems.includes("label: 'Customer Insights'") && !sidebarItems.includes("label: 'Purchase Analytics'") && !sidebarItems.includes("label: 'Marketing Analytics'")],
+  ['predictive analytics is one top-level route', sidebarItems.includes("path: '/predictive-analytics'") && !sidebarItems.includes("children: [\n      {\n        id: 'churn-prediction'")],
+  ['summary keeps executive rows and removes detailed row three', summary.includes('summary-hero-grid') && summary.includes('summary-engines') && summary.includes('summary-bottom-grid') && !summary.includes('<section className="summary-analysis-grid"')],
+  ['summary renders five clickable Value Loop stages', summary.includes('valueLoopStages.map') && summary.includes('to={engine.route}') && router.includes('path="/value-loop/customer-behavior"') && router.includes('path="/value-loop/value-optimization"')],
+  ['stage containers render existing analytics components', valueLoopPage.includes('CustomerProfile') && valueLoopPage.includes('CampaignPerformance') && valueLoopPage.includes('RFMAnalysis') && valueLoopPage.includes('Recommendation') && valueLoopPage.includes('<ActiveAnalytics />')],
+  ['predictive page consolidates validated existing models', predictivePage.includes('ChurnPrediction') && predictivePage.includes('CLVPrediction') && predictivePage.includes('DemandForecast') && predictivePage.includes('SalesForecast') && predictivePage.includes('<ActiveAnalytics />')],
+  ['legacy routes redirect into Value Loop views', sidebarItems.includes("'/marketing-analytics/google-ads': '/value-loop/traffic-acquisition?view=google-ads'") && sidebarItems.includes("'/purchase-analytics/rfm-analysis': '/value-loop/retention?view=rfm-analysis'") && router.includes('Object.entries(legacyRedirects)')],
+  ['data sources are adapter ready and explicitly synthetic', dataSources.includes('createSyntheticDataSourceAdapter') && dataSourceTypes.includes("integrationStatus: 'schema-ready' | 'connected'") && dataSourceTypes.includes("activeDataMode: 'synthetic' | 'live'") && !dataSources.includes("integrationStatus: 'connected'")],
   ['summary bottom grid keeps compact 3-panel structure', summary.includes('summary-bottom-grid') && summaryStyles.includes('grid-template-columns: minmax(0, .95fr) minmax(0, 1.45fr) minmax(340px, 1.35fr)')],
   ['summary key insights use compact semantic rows', summary.includes('summary-insight-row summary-insight-row--green') && summary.includes('summary-insight-row summary-insight-row--pink') && summaryStyles.includes('-webkit-line-clamp: 2')],
   ['summary recommendations use dynamic compact rows', summary.includes('const priorityRecommendations = data.recommendations.slice(0, 3)') && summary.includes('priorityRecommendations.map') && summary.includes('impactLabel(item.impact)') && !summary.includes("+Rp{index === 0 ? '480M' : '240M'}") && !summary.includes('Scale Google Ads ROAS Tinggi')],
