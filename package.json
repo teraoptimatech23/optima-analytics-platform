@@ -35,8 +35,9 @@
     "data:validate-attribution": "node scripts/validate-attribution.mjs",
     "data:validate-customer-perception": "node scripts/validate-customer-perception.mjs",
     "data:validate-recommendations": "node scripts/validate-recommendations.mjs",
+    "data:validate-dddvl": "node scripts/validate-dddvl-data.mjs",
     "data:query": "node scripts/query-demo.mjs",
-    "test": "node scripts/validate-profile-menu.mjs"
+    "test": "node scripts/validate-profile-menu.mjs && node scripts/validate-dddvl-data.mjs"
   },
   "dependencies": {
     "@fontsource/inter": "^5.3.0",

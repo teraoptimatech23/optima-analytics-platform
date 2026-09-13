@@ -38,9 +38,11 @@ const kpiCards = [
 const engineVisualConfig: Record<string, { number: string; tone: string; statusTone: string }> = {
   'customer-behavior': { number: '1', tone: 'blue', statusTone: 'green' },
   'traffic-acquisition': { number: '2', tone: 'orange', statusTone: 'orange' },
-  engagement: { number: '3', tone: 'cyan', statusTone: 'green' },
-  retention: { number: '4', tone: 'green', statusTone: 'violet' },
-  'value-optimization': { number: '5', tone: 'pink', statusTone: 'pink' },
+  conversion: { number: '3', tone: 'pink', statusTone: 'pink' },
+  engagement: { number: '4', tone: 'cyan', statusTone: 'green' },
+  retention: { number: '5', tone: 'green', statusTone: 'violet' },
+  analytics: { number: '6', tone: 'violet', statusTone: 'blue' },
+  'profit-optimization': { number: '7', tone: 'green', statusTone: 'pink' },
 }
 
 const GrowthChartData = [
@@ -309,7 +311,7 @@ export default function Summary() {
           </div>
           <div className="summary-health-card__status"><CheckCircle2 size={15} /> Healthy & Growing</div>
           <small>+4 pts vs Kuartal Lalu</small>
-          <em title="Main drag: Value Optimization (-7 pts)"><AlertTriangle size={13} /> Value Optimization menjadi hambatan utama -7 pts</em>
+          <em title="Main drag: Conversion (-7 pts)"><AlertTriangle size={13} /> Conversion menjadi hambatan utama -7 pts</em>
         </article>
 
         <div className="summary-kpi-strip">
@@ -330,9 +332,9 @@ export default function Summary() {
         </div>
       </section>
 
-      <section className="summary-engines" aria-label="Digital Value Loop stages" ref={enginesSectionRef}>
+      <section className="summary-engines" aria-label="Data-Driven Digital Value Loop" ref={enginesSectionRef}>
         <div className="summary-engines__header">
-          <div className="summary-engines__title">Digital Value Loop <span title="Five stages from customer behavior to economic value">i</span></div>
+          <div className="summary-engines__title">Data-Driven Digital Value Loop <span title="Seven loops from customer behavior to profit optimization">i</span></div>
           <div className="summary-engine-stepper" aria-hidden="true">
             <span className="summary-engine-stepper__warning">!</span>
           </div>
@@ -344,12 +346,13 @@ export default function Summary() {
             const needsAttention = /attention|critical|kritis/i.test(engine.status)
             return (
               <div className="summary-engine-item" key={engine.id}>
-                <Link className={`summary-engine summary-engine--${visual.tone}${needsAttention ? ' is-drag' : ''}`} to={engine.route} ref={needsAttention ? conversionCardRef : undefined}>
+                <Link className={`summary-engine summary-engine--${visual.tone}${needsAttention ? ' is-drag' : ''}`} to={engine.route} ref={engine.id === 'conversion' ? conversionCardRef : undefined}>
                   <b className="summary-engine__number">{visual.number}</b>
                   <div className="summary-engine__head"><Icon size={30} /><strong>{engine.label}</strong></div>
                   <div className="summary-engine__score"><span>{engine.score}</span><small>/100</small></div>
                   <em className={`summary-engine__status summary-engine__status--${visual.statusTone}`}>{engine.status}</em>
-                  <p>{engine.summary}</p>
+                  <div className="summary-engine__kpi"><strong>{engine.primaryKpi}</strong><Sparkline points={engine.trend} tone={visual.tone} /></div>
+                  <p><span>{engine.insight}</span><small>{engine.recommendation}</small></p>
                   <i className="summary-engine__cta"><ArrowRight size={17} /></i>
                 </Link>
                 {index < valueLoopStages.length - 1 && <span className="summary-engine-connector" aria-hidden="true"><ArrowRight size={25} /></span>}
@@ -359,7 +362,7 @@ export default function Summary() {
         </div>
       </section>
       <section className="summary-bottom-grid" aria-label="Executive action summary">
-        <Link to="/predictive-analytics?view=insights" className="summary-panel summary-list-panel summary-action-panel" aria-label="Buka semua key insights">
+        <Link to="/value-loop/analytics?view=ai-insight" className="summary-panel summary-list-panel summary-action-panel" aria-label="Buka semua key insights">
           <h3>Key Insights</h3>
           <ul>
             <li className="summary-insight-row summary-insight-row--green"><LineChart size={18} /><span>{topInsight?.label ?? 'Revenue'} membaik pada periode {period}.</span></li>
@@ -370,7 +373,7 @@ export default function Summary() {
           <span className="summary-bottom-cta">Lihat semua insight <ArrowRight size={14} /></span>
         </Link>
 
-        <Link to="/value-loop/value-optimization?view=recommendations" className="summary-panel summary-rec-panel summary-action-panel" aria-label="Buka priority recommendations">
+        <Link to="/value-loop/analytics?view=recommendations" className="summary-panel summary-rec-panel summary-action-panel" aria-label="Buka priority recommendations">
           <h3>Priority Recommendations</h3>
           {priorityRecommendations.map((item, index) => {
             const Icon = recommendationIcons[index] ?? Target
@@ -395,13 +398,13 @@ export default function Summary() {
             <ShieldCheck size={52} />
             <div>
               <strong><span>Healthy & Growing</span><b>{healthScore}/100</b></strong>
-              <p>Value Optimization adalah stage yang perlu perhatian. Prioritaskan optimasi checkout dan channel ber-ROAS tinggi untuk meningkatkan nilai pelanggan dan profit.</p>
+              <p>Conversion adalah loop yang perlu perhatian. Prioritaskan optimasi checkout dan channel ber-ROAS tinggi untuk meningkatkan customer value dan profit growth.</p>
             </div>
           </div>
           <div className="summary-impact"><span>{highImpactCount > 0 ? "High-Impact Opportunities" : "Priority Opportunities"}</span><b>{executiveImpactText}</b></div>
           <div className="summary-executive__stats">
             <span><small>Health Score</small><b>{healthScore}<em>/100</em></b><i>Healthy</i></span>
-            <span><small>Stage Priority</small><b>Value Optimization</b><i>Needs Attention</i></span>
+            <span><small>Loop Priority</small><b>Conversion</b><i>Needs Attention</i></span>
             <span><small>Data Sources</small><b>7 Schemas</b><i>Adapter Ready</i></span>
           </div>
         </article>

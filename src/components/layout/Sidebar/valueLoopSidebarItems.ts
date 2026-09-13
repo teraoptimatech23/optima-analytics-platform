@@ -1,4 +1,4 @@
-import { BrainCircuit, LayoutDashboard, RefreshCcw } from 'lucide-react'
+import { LayoutDashboard, RefreshCcw } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { valueLoopStages } from '@/config/valueLoop'
 
@@ -22,14 +22,14 @@ export type SidebarMenuNode = SidebarLeafItem | SidebarSection
 export const sidebarItems: SidebarMenuNode[] = [
   {
     id: 'summary',
-    label: 'Executive Summary',
+    label: 'Summary',
     icon: LayoutDashboard,
     path: '/summary',
     description: 'Executive view untuk business health, Value Loop priority, insight, dan tindakan utama.',
   },
   {
     id: 'digital-value-loop',
-    label: 'Digital Value Loop',
+    label: 'Data-Driven Digital Value Loop',
     icon: RefreshCcw,
     children: valueLoopStages.map((stage) => ({
       id: stage.id,
@@ -38,13 +38,6 @@ export const sidebarItems: SidebarMenuNode[] = [
       path: stage.route,
       description: stage.summary,
     })),
-  },
-  {
-    id: 'predictive-analytics',
-    label: 'Predictive Analytics',
-    icon: BrainCircuit,
-    path: '/predictive-analytics',
-    description: 'Intelligence layer lintas seluruh Digital Value Loop menggunakan model existing yang tervalidasi.',
   },
 ]
 
@@ -58,7 +51,7 @@ export const legacyRedirects: Record<string, string> = {
   '/customer-insights/pain-points': '/value-loop/customer-behavior?view=pain-points',
   '/customer-insights/motivasi-pelanggan': '/value-loop/customer-behavior?view=customer-motivation',
   '/customer-insights/persepsi-pelanggan': '/value-loop/customer-behavior?view=customer-perception',
-  '/purchase-analytics/perilaku-pembelian': '/value-loop/customer-behavior?view=purchase-behaviour',
+  '/purchase-analytics/perilaku-pembelian': '/value-loop/conversion?view=conversion-funnel',
   '/purchase-analytics/market-basket': '/value-loop/customer-behavior?view=market-basket',
   '/purchase-analytics/market-basket-analysis': '/value-loop/customer-behavior?view=market-basket',
   '/purchase-analytics/customer-journey': '/value-loop/customer-behavior?view=customer-journey',
@@ -69,24 +62,26 @@ export const legacyRedirects: Record<string, string> = {
   '/marketing-analytics/youtube-ads': '/value-loop/traffic-acquisition?view=youtube-ads',
   '/marketing-analytics/campaign-performance': '/value-loop/traffic-acquisition?view=campaign-performance',
   '/marketing-analytics/attribution': '/value-loop/traffic-acquisition?view=attribution',
-  '/predictive-analytics/churn-prediction': '/predictive-analytics?view=churn',
-  '/predictive-analytics/customer-lifetime-value-prediction': '/predictive-analytics?view=clv',
-  '/predictive-analytics/customer-lifetime-value': '/predictive-analytics?view=clv',
-  '/predictive-analytics/clv-prediction': '/predictive-analytics?view=clv',
-  '/predictive-analytics/demand-forecast': '/predictive-analytics?view=demand',
-  '/predictive-analytics/sales-forecast': '/predictive-analytics?view=sales',
-  '/predictive-analytics/next-best-offer': '/predictive-analytics',
-  '/ai-insight': '/predictive-analytics?view=insights',
-  '/recommendation': '/value-loop/value-optimization?view=recommendations',
+  '/predictive-analytics': '/value-loop/analytics',
+  '/predictive-analytics/churn-prediction': '/value-loop/analytics?view=retention-prediction',
+  '/predictive-analytics/customer-lifetime-value-prediction': '/value-loop/analytics?view=value-revenue-prediction',
+  '/predictive-analytics/customer-lifetime-value': '/value-loop/analytics?view=value-revenue-prediction',
+  '/predictive-analytics/clv-prediction': '/value-loop/analytics?view=value-revenue-prediction',
+  '/predictive-analytics/demand-forecast': '/value-loop/analytics?view=value-revenue-prediction',
+  '/predictive-analytics/sales-forecast': '/value-loop/analytics?view=value-revenue-prediction',
+  '/predictive-analytics/next-best-offer': '/value-loop/analytics?view=recommendations',
+  '/ai-insight': '/value-loop/analytics?view=ai-insight',
+  '/recommendation': '/value-loop/analytics?view=recommendations',
+  '/value-loop/value-optimization': '/value-loop/profit-optimization',
   '/profil-pelanggan': '/value-loop/customer-behavior?view=customer-profile',
   '/kebutuhan-pelanggan': '/value-loop/customer-behavior?view=customer-needs',
   '/pain-points': '/value-loop/customer-behavior?view=pain-points',
   '/pendorong-motivasi': '/value-loop/customer-behavior?view=customer-motivation',
   '/persepsi-pelanggan': '/value-loop/customer-behavior?view=customer-perception',
-  '/perilaku-pembelian': '/value-loop/customer-behavior?view=purchase-behaviour',
-  '/insight-dashboard': '/predictive-analytics?view=insights',
-  '/rekomendasi': '/value-loop/value-optimization?view=recommendations',
-  '/laporan-kustom': '/value-loop/value-optimization?view=recommendations',
+  '/perilaku-pembelian': '/value-loop/conversion?view=conversion-funnel',
+  '/insight-dashboard': '/value-loop/analytics?view=ai-insight',
+  '/rekomendasi': '/value-loop/analytics?view=recommendations',
+  '/laporan-kustom': '/value-loop/profit-optimization?view=recommendations',
 }
 
 export function isSidebarSection(node: SidebarMenuNode): node is SidebarSection {

@@ -5,7 +5,6 @@ import { legacyRedirects } from '@/components/layout/Sidebar/valueLoopSidebarIte
 import Login from '@/pages/Login'
 import Summary from '@/pages/Summary'
 import ValueLoopStagePage from '@/pages/ValueLoop'
-import PredictiveAnalytics from '@/pages/PredictiveAnalytics'
 
 export default function ValueLoopRouter() {
   return (
@@ -18,10 +17,11 @@ export default function ValueLoopRouter() {
           <Route path="/summary" element={<Summary />} />
           <Route path="/value-loop/customer-behavior" element={<ValueLoopStagePage stageId="customer-behavior" />} />
           <Route path="/value-loop/traffic-acquisition" element={<ValueLoopStagePage stageId="traffic-acquisition" />} />
+          <Route path="/value-loop/conversion" element={<ValueLoopStagePage stageId="conversion" />} />
           <Route path="/value-loop/engagement" element={<ValueLoopStagePage stageId="engagement" />} />
           <Route path="/value-loop/retention" element={<ValueLoopStagePage stageId="retention" />} />
-          <Route path="/value-loop/value-optimization" element={<ValueLoopStagePage stageId="value-optimization" />} />
-          <Route path="/predictive-analytics" element={<PredictiveAnalytics />} />
+          <Route path="/value-loop/analytics" element={<ValueLoopStagePage stageId="analytics" />} />
+          <Route path="/value-loop/profit-optimization" element={<ValueLoopStagePage stageId="profit-optimization" />} />
           {Object.entries(legacyRedirects).map(([from, to]) => (
             <Route key={from} path={from} element={<Navigate to={to} replace />} />
           ))}

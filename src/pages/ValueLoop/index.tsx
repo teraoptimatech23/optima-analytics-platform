@@ -21,6 +21,7 @@ import CLVPrediction from '@/pages/PredictiveAnalytics/CLVPrediction'
 import SalesForecast from '@/pages/PredictiveAnalytics/SalesForecast'
 import DemandForecast from '@/pages/PredictiveAnalytics/DemandForecast'
 import Recommendation from '@/pages/Recommendation'
+import AIInsight from '@/pages/AIInsight'
 import {
   valueLoopCoverage,
   valueLoopStageById,
@@ -50,6 +51,20 @@ const analyticsComponents: Record<string, ComponentType> = {
   'sales-forecast': SalesForecast,
   'demand-forecast': DemandForecast,
   recommendations: Recommendation,
+  'conversion-funnel': PurchaseBehaviour,
+  'checkout-journey': CustomerJourney,
+  'channel-conversion': CampaignPerformance,
+  'conversion-attribution': Attribution,
+  overview: AIInsight,
+  'customer-prediction': CustomerJourney,
+  'traffic-prediction': Attribution,
+  'conversion-prediction': CampaignPerformance,
+  'engagement-prediction': CustomerMotivation,
+  'retention-prediction': ChurnPrediction,
+  'value-revenue-prediction': CLVPrediction,
+  'ai-insight': AIInsight,
+  'profit-overview': SalesForecast,
+  'channel-profitability': CampaignPerformance,
 }
 
 interface ValueLoopStagePageProps {
@@ -75,20 +90,20 @@ export default function ValueLoopStagePage({ stageId }: ValueLoopStagePageProps)
         <div className="value-loop-stage__identity">
           <span className="value-loop-stage__icon" aria-hidden="true"><Icon size={24} /></span>
           <div>
-            <span>Digital Value Loop</span>
+            <span>Data-Driven Digital Value Loop</span>
             <h1>{stage.label}</h1>
             <p>{stage.summary}</p>
           </div>
         </div>
 
         <div className="value-loop-stage__health" aria-label={`${stage.label} health score ${stage.score} dari 100`}>
-          <span>Stage Health</span>
+          <span>Loop Health</span>
           <strong>{stage.score}<small>/100</small></strong>
           <em><CheckCircle2 size={14} />{stage.status}</em>
         </div>
       </header>
 
-      <section className="value-loop-stage__orientation" aria-label="Stage scope and data readiness">
+      <section className="value-loop-stage__orientation" aria-label="Loop scope and data readiness">
         <div>
           <span><Layers3 size={15} />Decision question</span>
           <strong>{stage.question}</strong>
@@ -126,7 +141,7 @@ export default function ValueLoopStagePage({ stageId }: ValueLoopStagePageProps)
       <section className="value-loop-stage__detail" aria-label={`${activeModule.label} detailed analytics`}>
         <div className="value-loop-stage__detail-head">
           <div>
-            <span>Detailed Analytics</span>
+            <span>Loop Analysis</span>
             <h2>{activeModule.label}</h2>
           </div>
           <p>{activeModule.description}</p>
